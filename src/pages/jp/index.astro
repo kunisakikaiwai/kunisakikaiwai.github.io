@@ -1,9 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
+const prefaceModule = await import('../../content/jp/00-preface.md');
+const Preface = prefaceModule.default;
+
 const posts = Object.values(
-  import.meta.glob('../../content/jp/story/*.md', { eager: true })
+    import.meta.glob('../../content/jp/story/*.md', { eager: true })
 )
+
   .filter((post: any) => post.frontmatter?.slug)
   .sort((a: any, b: any) => {
     return (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999);
@@ -13,15 +17,15 @@ const posts = Object.values(
 <Layout title="国東界隈">
   <main>
     <header class="site-top">
-
     <div class="top-row">
-
+    </div>
+    </header>
+    <h2>国東物語</h2>
+    <div>
+        <Preface />
     </div>
 
-    </header>
-
-    <h2>国東物語</h2>
-
+    <h3>もくじ</h3>
     <ol class="toc">
       {posts.map((post: any) => (
         <li>
@@ -31,6 +35,15 @@ const posts = Object.values(
         </li>
       ))}
     </ol>
+
+    <h2>国東学検定試験</h2>
+　　 <div>
+        あなたの国東愛がさくっとわかる
+        <a href={`/jp/kunisakiology`}>
+        検定試験
+        </a>
+        に挑戦<br>
+    </div>
   </main>
 </Layout>
 

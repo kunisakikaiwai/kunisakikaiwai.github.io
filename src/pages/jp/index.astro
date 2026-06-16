@@ -1,0 +1,64 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const posts = Object.values(
+  import.meta.glob('../../content/jp/story/*.md', { eager: true })
+)
+  .filter((post: any) => post.frontmatter?.slug)
+  .sort((a: any, b: any) => {
+    return (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999);
+  });
+---
+
+<Layout title="国東界隈">
+  <main>
+    <header class="site-top">
+
+    <div class="top-row">
+
+    </div>
+
+    </header>
+
+    <h2>国東物語</h2>
+
+    <ol class="toc">
+      {posts.map((post: any) => (
+        <li>
+          <a href={`/jp/story/${post.frontmatter.slug}/`}>
+            {post.frontmatter.title}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </main>
+</Layout>
+
+<style>
+    .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    }
+
+    .site-logo a {
+    text-decoration: none;
+    color: inherit;
+    }
+
+    .title-ja {
+    font-size: 2rem;
+    font-weight: bold;
+    }
+
+    .title-en {
+    font-size: 1rem;
+    color: #666;
+    }
+
+    .lang-switch {
+    padding-top: 0.5rem;
+    font-size: 0.9rem;
+    }
+
+</style>

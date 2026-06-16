@@ -1,0 +1,73 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = Object.values(
+    import.meta.glob('../../../content/jp/story/*.md', { eager: true })
+  )
+    .filter((post: any) => post.frontmatter?.slug)
+    .sort((a: any, b: any) => {
+      return (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999);
+    });
+
+  return posts.map((post: any, index: number) => ({
+    params: {
+      slug: post.frontmatter.slug,
+    },
+    props: {
+      post,
+      prevPost: posts[index - 1] ?? null,
+      nextPost: posts[index + 1] ?? null,
+    },
+  }));
+}
+
+const { post, prevPost, nextPost } = Astro.props;
+const Content = post.default;
+---
+
+<Layout title={post.frontmatter.title}>
+  <main>
+    <nav class="post-nav">
+      <div>{prevPost && <a href={`/jp/story/${prevPost.frontmatter.slug}/`}>◀ 前へ</a>}</div>
+      <div><a href="/jp/">目次</a></div>
+      <div>{nextPost && <a href={`/jp/story/${nextPost.frontmatter.slug}/`}>次へ ▶</a>}</div>
+    </nav>
+
+    <h1>{post.frontmatter.title}</h1>
+
+    <article>
+      <Content />
+    </article>
+  </main>
+</Layout>
+
+<style>
+  .post-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .post-nav > div {
+    flex: 1;
+  }
+
+  .post-nav > div:nth-child(1) {
+    text-align: left;
+  }
+
+  .post-nav > div:nth-child(2) {
+    text-align: center;
+  }
+
+  .post-nav > div:nth-child(3) {
+    text-align: right;
+  }
+
+
+</style>

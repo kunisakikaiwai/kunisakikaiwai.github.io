@@ -25,6 +25,7 @@
         </div>
 
         <nav class="main-menu">
+        <a href="/jp/">ホーム</a>
         <a href="/jp/feel/">国東を感じる</a>
         <a href="/jp/">国東を知る</a>
         <a href="/jp/walk/">国東を歩く</a>
@@ -43,6 +44,33 @@
         <slot />
     </div>
     </body>
+
+
+
+    <hr class="footer-divider">
+    <footer class="site-footer">
+    <div class="footer-inner">
+
+        <div class="footer-title">
+        <h3>国東界隈 | Kunisaki Kaiwai</h3>
+        </div>
+
+        <nav class="footer-links">
+        <a href="/jp/">ホーム</a>
+        <a href="/jp/feel/">国東を感じる</a>
+        <a href="/jp/">国東を知る</a>
+        <a href="/jp/walk/">国東を歩く</a>
+        <a href="/jp/kunisakiology/">国東学検定試験</a>
+        <a href="/jp/about/">サイト情報</a>
+        </nav>
+
+        <p class="copyright">
+        © 2026 Kunisaki Kaiwai
+        </p>
+
+        </div>
+    </footer>
+
 </html>
 
 <style>
@@ -86,7 +114,7 @@
   .main-menu {
     display: flex;
     justify-content: center;
-    gap: 2rem;
+    gap: 1rem;
     margin-top: 1rem;
   }
 
@@ -113,4 +141,50 @@
     margin: 0 auto;
     padding: 0 1.5rem;
   }
+
+    .footer-divider {
+    border: 0;
+    border-top: 2px solid #666;
+    margin: 3rem 0 2rem 0;
+    }
+
+.footer-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-title h3 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.footer-title p {
+  margin: 0.2rem 0 0;
+  line-height: 1.2;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.footer-links {
+  margin: 1rem 0 0.8rem;
+}
+
+.footer-links a {
+  margin: 0.3rem;
+  text-decoration: none;
+}
+
+.footer-message {
+  margin: 0.5rem 0;
+  line-height: 1.3;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.copyright {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: #999;
+}
 </style>

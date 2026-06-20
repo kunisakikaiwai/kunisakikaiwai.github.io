@@ -8,6 +8,10 @@ const posts = Object.values(
     import.meta.glob('../../content/jp/story/*.md', { eager: true })
 )
 
+const items = Object.values(
+    import.meta.glob('../../content/jp/rabithole/*.md', { eager: true })
+)
+
   .filter((post: any) => post.frontmatter?.slug)
   .sort((a: any, b: any) => {
     return (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999);
@@ -36,6 +40,21 @@ const posts = Object.values(
       ))}
     </ol>
 
+    <h2>国東ねほりはほり</h2>
+
+    <h4>
+    Coming Soon
+    </h4>
+    <ol class="toc">
+      {items.map((item: any) => (
+        <li>
+          <a href={`/jp/rabithole/${item.frontmatter.slug}/`}>
+            {item.frontmatter.title}
+          </a>
+        </li>
+      ))}
+    </ol>
+    
     <h2>国東学検定試験</h2>
 　　 <div>
         あなたの国東愛がさくっとわかる

@@ -1,0 +1,43 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = Object.values(
+    import.meta.glob('../../../content/jp/rabithole/*.md', { eager: true })
+  );
+
+  return posts.map((post: any) => ({
+    params: { slug: post.frontmatter.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const BlogPost = post.default;
+---
+
+<Layout title={`${post.frontmatter.title} | 国東界隈`}>
+  <main>
+    <article>
+      <h2>{post.frontmatter.title}</h2>
+
+      <div class="meta">
+        {post.frontmatter.date}
+        {post.frontmatter.author && ` / ${post.frontmatter.author}`}
+      </div>
+
+      <BlogPost />
+
+      <hr />
+
+    </article>
+  </main>
+</Layout>
+
+<style>
+  .meta {
+    color: #777;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+</style>

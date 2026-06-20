@@ -1,0 +1,59 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+const posts = Object.values(
+  import.meta.glob('../../../content/jp/community/blog/*.md', { eager: true })
+).sort((a: any, b: any) =>
+  new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
+);
+---
+
+<Layout title="国東だより | 国東界隈">
+  <main>
+    <h2>国東だより</h2>
+
+    <p>
+    国東で見つけた風景、歩いた道、聞いた話、感じたことを共有するコミュニティブログです。<br><br>
+    国東で見つけたものを共有しませんか？
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScx68DI13wrC7rDrmfEE08Q7DU4XvHkZZZi-OE3_R9iR96cng/viewform?usp=publish-editor">
+          メッセージ
+        </a>
+        を送る
+      </p>
+
+    <h3>
+      最近の投稿：
+    </h3>
+
+    <ul class="blog-list">
+      {posts.map((post: any) => (
+        <li>
+          <a href={`/jp/community/blog/${post.frontmatter.slug}/`}>
+            {post.frontmatter.title}
+          </a>
+          <div class="meta">
+            {post.frontmatter.date}
+            {post.frontmatter.author && ` / ${post.frontmatter.author}`}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </main>
+</Layout>
+
+<style>
+  .blog-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .blog-list li {
+    margin-bottom: 1.4rem;
+  }
+
+  .meta {
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: 0.2rem;
+  }
+</style>

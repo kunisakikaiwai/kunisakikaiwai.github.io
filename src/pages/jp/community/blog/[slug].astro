@@ -3,7 +3,7 @@ import Layout from '../../../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const posts = Object.values(
-    import.meta.glob('../../../../content/jp/community/blog/*.md', { eager: true })
+    import.meta.glob('../../../../content/jp/community/blog/*.mdx', { eager: true })
   );
 
   return posts.map((post: any) => ({

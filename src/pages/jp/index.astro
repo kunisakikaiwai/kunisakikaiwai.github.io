@@ -1,15 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
-const prefaceModule = await import('../../content/jp/00-preface.md');
+const prefaceModule = await import('../../content/jp/00-preface.mdx');
 const Preface = prefaceModule.default;
 
 const posts = Object.values(
-    import.meta.glob('../../content/jp/story/*.md', { eager: true })
+    import.meta.glob('../../content/jp/story/*.mdx', { eager: true })
 )
 
 const items = Object.values(
-    import.meta.glob('../../content/jp/rabithole/*.md', { eager: true })
+    import.meta.glob('../../content/jp/rabithole/*.mdx', { eager: true })
 )
 
   .filter((post: any) => post.frontmatter?.slug)
@@ -55,7 +55,7 @@ const items = Object.values(
       ))}
     </ol>
     
-    <h2>国東学検定試験</h2>
+    <h2>国東愛検定</h2>
 　　 <div>
         あなたの国東愛がさくっとわかる
         <a href={`/jp/kunisakiology`}>

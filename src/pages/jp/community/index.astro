@@ -2,7 +2,7 @@
 import Layout from '../../../layouts/Layout.astro';
 
 const posts = Object.values(
-  import.meta.glob('../../../content/jp/community/blog/*.md', { eager: true })
+  import.meta.glob('../../../content/jp/community/blog/*.mdx', { eager: true })
 ).sort((a: any, b: any) =>
   new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
 );

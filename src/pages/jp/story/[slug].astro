@@ -3,7 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const posts = Object.values(
-    import.meta.glob('../../../content/jp/story/*.md', { eager: true })
+    import.meta.glob('../../../content/jp/story/*.mdx', { eager: true })
   )
     .filter((post: any) => post.frontmatter?.slug)
     .sort((a: any, b: any) => {

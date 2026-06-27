@@ -1,0 +1,52 @@
+
+---
+const { image, title = "", alt = "" } = Astro.props;
+---
+
+<div class="reference">
+  <h4>{title}</h4>
+
+  <div class="reference-card">
+    <div class="reference-photo">
+      <img src={image} alt={alt} />
+    </div>
+
+    <div class="reference-text">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+.reference-card {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin: 1rem 0;
+}
+
+.reference-photo {
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.reference-photo img {
+  width: 100%;
+  display: block;
+  border-radius: 1px;
+}
+
+.reference-text :global(p:first-child) {
+  margin-top: 0;
+}
+
+@media (max-width: 300px) {
+  .reference-card {
+    flex-direction: column;
+  }
+
+  .reference-photo {
+    width: 100%;
+  }
+}
+</style>

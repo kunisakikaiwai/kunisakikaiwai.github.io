@@ -1,0 +1,40 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+const challengeModule = await import('../../../content/en/kunisakiology/challenge.mdx');
+const Challenge = challengeModule.default;
+---
+
+<Layout title="Kunisaki Love Test | Kunisaki Kaiwai" lang="en">
+  <main>
+        <Challenge />
+  </main>
+</Layout>
+
+<style>
+    .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    }
+
+    .site-logo a {
+    text-decoration: none;
+    color: inherit;
+    }
+
+    .title-ja {
+    font-size: 2rem;
+    font-weight: bold;
+    }
+
+    .title-en {
+    font-size: 1rem;
+    color: #666;
+    }
+
+    .lang-switch {
+    padding-top: 0.5rem;
+    font-size: 0.9rem;
+    }
+
+</style>

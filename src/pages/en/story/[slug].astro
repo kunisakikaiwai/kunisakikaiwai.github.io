@@ -1,0 +1,73 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = Object.values(
+    import.meta.glob('../../../content/en/story/*.mdx', { eager: true })
+  )
+    .filter((post: any) => post.frontmatter?.slug)
+    .sort((a: any, b: any) => {
+      return (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999);
+    });
+
+  return posts.map((post: any, index: number) => ({
+    params: {
+      slug: post.frontmatter.slug,
+    },
+    props: {
+      post,
+      prevPost: posts[index - 1] ?? null,
+      nextPost: posts[index + 1] ?? null,
+    },
+  }));
+}
+
+const { post, prevPost, nextPost } = Astro.props;
+const Content = post.default;
+---
+
+<Layout title={post.frontmatter.title} lang="en">
+  <main>
+    <nav class="post-nav">
+      <div>{prevPost && <a href={`/en/story/${prevPost.frontmatter.slug}/`}>◀ Prev</a>}</div>
+      <div><a href="/en/">Contents</a></div>
+      <div>{nextPost && <a href={`/en/story/${nextPost.frontmatter.slug}/`}>Next ▶</a>}</div>
+    </nav>
+
+    <h1>{post.frontmatter.title}</h1>
+
+    <article>
+      <Content />
+    </article>
+  </main>
+</Layout>
+
+<style>
+  .post-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .post-nav > div {
+    flex: 1;
+  }
+
+  .post-nav > div:nth-child(1) {
+    text-align: left;
+  }
+
+  .post-nav > div:nth-child(2) {
+    text-align: center;
+  }
+
+  .post-nav > div:nth-child(3) {
+    text-align: right;
+  }
+
+
+</style>

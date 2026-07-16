@@ -1,0 +1,58 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+const posts = Object.values(
+  import.meta.glob('../../../content/en/community/blog/*.mdx', { eager: true })
+).sort((a: any, b: any) =>
+  new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
+);
+---
+
+<Layout title="Kunisaki Journal | Kunisaki Kaiwai" lang="en">
+  <main>
+    <h2>Kunisaki Journal</h2>
+
+    <p>
+    A community blog for sharing the scenery we've found in Kunisaki, the paths we've walked, the stories we've heard, and the things we've felt.<br><br>
+    Why not share what you've discovered in Kunisaki?
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScx68DI13wrC7rDrmfEE08Q7DU4XvHkZZZi-OE3_R9iR96cng/viewform?usp=publish-editor">
+          Send us a message
+        </a>.
+      </p>
+
+    <h3>
+      Recent posts:
+    </h3>
+
+    <ul class="blog-list">
+      {posts.map((post: any) => (
+        <li>
+          <a href={`/en/community/blog/${post.frontmatter.slug}/`}>
+            {post.frontmatter.title}
+          </a>
+          <div class="meta">
+            {post.frontmatter.date}
+            {post.frontmatter.author && ` / ${post.frontmatter.author}`}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </main>
+</Layout>
+
+<style>
+  .blog-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .blog-list li {
+    margin-bottom: 1.4rem;
+  }
+
+  .meta {
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: 0.2rem;
+  }
+</style>

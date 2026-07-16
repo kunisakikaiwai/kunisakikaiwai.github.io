@@ -25,7 +25,7 @@ const items = Object.values(
     </div>
     </header>
     <h2>国東物語</h2>
-    <div>
+    <div class="preface">
         <Preface />
     </div>
 
@@ -67,6 +67,11 @@ const items = Object.values(
 </Layout>
 
 <style>
+    .preface :global(p) {
+    margin: 0.3rem 0;
+    line-height: 1.4;
+    }
+
     .top-row {
     display: flex;
     justify-content: space-between;

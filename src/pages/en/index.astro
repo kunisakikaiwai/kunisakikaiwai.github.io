@@ -1,0 +1,102 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const prefaceModule = await import('../../content/en/00-preface.mdx');
+const Preface = prefaceModule.default;
+
+const posts = Object.values(
+    import.meta.glob('../../content/en/story/*.mdx', { eager: true })
+)
+  .filter((post: any) => post.frontmatter?.slug)
+  .sort((a: any, b: any) => {
+    return (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999);
+  });
+
+const items = Object.values(
+    import.meta.glob('../../content/en/rabithole/*.mdx', { eager: true })
+)
+  .filter((item: any) => item.frontmatter?.slug)
+  .sort((a: any, b: any) => {
+    return (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999);
+  });
+---
+
+<Layout title="Kunisaki Kaiwai" lang="en">
+  <main>
+    <header class="site-top">
+    <div class="top-row">
+    </div>
+    </header>
+    <h2>The Tale of Kunisaki</h2>
+    <div class="preface">
+        <Preface />
+    </div>
+
+    <h3>Contents</h3>
+    <ol class="toc">
+      {posts.map((post: any) => (
+        <li>
+          <a href={`/en/story/${post.frontmatter.slug}/`}>
+            {post.frontmatter.title}
+          </a>
+        </li>
+      ))}
+    </ol>
+
+    <h2>Kunisaki: Down the Rabbit Hole</h2>
+
+    <h4>
+    Coming Soon
+    </h4>
+    <ol class="toc">
+      {items.map((item: any) => (
+        <li>
+          <a href={`/en/rabithole/${item.frontmatter.slug}/`}>
+            {item.frontmatter.title}
+          </a>
+        </li>
+      ))}
+    </ol>
+
+    <h2>Kunisaki Love Test</h2>
+    <div>
+        Find out at a glance how deep your love for Kunisaki runs — take the
+        <a href={`/en/kunisakiology`}>
+        proficiency test</a>.<br>
+    </div>
+  </main>
+</Layout>
+
+<style>
+    .preface :global(p) {
+    margin: 0.3rem 0;
+    line-height: 1.4;
+    }
+
+    .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    }
+
+    .site-logo a {
+    text-decoration: none;
+    color: inherit;
+    }
+
+    .title-ja {
+    font-size: 2rem;
+    font-weight: bold;
+    }
+
+    .title-en {
+    font-size: 1rem;
+    color: #666;
+    }
+
+    .lang-switch {
+    padding-top: 0.5rem;
+    font-size: 0.9rem;
+    }
+
+</style>

@@ -48,27 +48,29 @@ const nav = isEn
 
     <body class={bodyClass}>
     <header class="site-top">
-        <div class="top-row">
-        <div class="site-logo">
-            <a href={`${base}/`}>
-            <div class="title-ja">国東界隈</div>
-            <div class="title-en">Kunisaki Kaiwai</div>
-            </a>
-        </div>
+        <div class="top-bar">
+            <div class="site-logo">
+                <a href={`${base}/`}>
+                    <img
+                        src="/images/logo/kunisaki-kaiwai_logo4.png"
+                        alt="国東界隈 Kunisaki Kaiwai"
+                        class="logo-img"
+                    />
+                </a>
+            </div>
 
-        <div class="top-row">
-            <div class="top-links">
+            <div class="top-right">
                 <div class="lang-switch">
                     <a href="/jp/">日本語</a> |
                     <a href="/en/">English</a>
                 </div>
+
+                <nav class="main-menu">
+                    {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+                </nav>
             </div>
         </div>
-        </header>
-
-        <nav class="main-menu">
-        {nav.map((item) => <a href={item.href}>{item.label}</a>)}
-        </nav>
+    </header>
 
 
     <header class="site-header">
@@ -165,19 +167,46 @@ const nav = isEn
   }
 
   .site-top {
-    padding: 1rem 1rem;
+    padding: 1rem 2rem;
     border-bottom: 1px solid #ddd;
   }
 
-  .top-row {
+  /* Logo on the left; a right column holds the language switch on the top
+     row and the menu bar below it, aligned to the logo's bottom edge. */
+  .top-bar {
     display: flex;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+
+  .top-right {
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 0.5rem;
   }
 
   .site-logo a {
     text-decoration: none;
     color: inherit;
+  }
+
+  .logo-img {
+    height: 130px;
+    width: auto;
+    display: block;
+  }
+
+  @media (max-width: 640px) {
+    .top-bar {
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
+    .logo-img {
+      height: 80px;
+    }
   }
 
   .title-ja {
@@ -192,15 +221,15 @@ const nav = isEn
 
   .lang-switch {
     font-size: 0.9rem;
-    padding-top: 0.5rem;
+    align-self: flex-end;
   }
 
   .main-menu {
     display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 0rem;
-    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.5rem 1rem;
+    margin: 0;
     font-size: 1.0rem;
   }
 
@@ -225,7 +254,7 @@ const nav = isEn
   .container {
     max-width: 860px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 2.5rem;
     font-size: 1.2rem;
   }
 

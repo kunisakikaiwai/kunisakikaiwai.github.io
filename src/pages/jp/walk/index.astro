@@ -1,0 +1,84 @@
+---
+// 「国東を歩く」ランディングページ。
+// 項目を増やすときは ITEMS に { href, label, lead, icon } を追加する
+// （icon は src/images/ 配下の画像を import して渡す）。
+import Layout from "../../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import longTrailIcon from "../../../images/PlacesToGo/LongTrail_Overview.png";
+
+const ITEMS = [
+    {
+        href: "/jp/walk/long-trail/",
+        label: "国東半島峯道ロングトレイル",
+        lead: "国東半島の峯道をたどる全10コースのロングトレイル。豊後高田コース・国東コースの各コースマップを掲載しています。",
+        icon: longTrailIcon,
+    },
+];
+---
+
+<Layout title="国東を歩く" lang="jp">
+    <h2>国東を歩く</h2>
+
+    <ul class="walk-list">
+        {
+            ITEMS.map(({ href, label, lead, icon }) => (
+                <li>
+                    <a href={href} class="walk-icon-link">
+                        <Image
+                            src={icon}
+                            alt=""
+                            width={280}
+                            class="walk-icon"
+                        />
+                    </a>
+                    <div class="walk-text">
+                        <a href={href} class="walk-title">
+                            {label}
+                        </a>
+                        <p class="walk-lead">{lead}</p>
+                    </div>
+                </li>
+            ))
+        }
+    </ul>
+</Layout>
+
+<style>
+    .walk-list {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0;
+    }
+
+    .walk-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .walk-icon-link {
+        flex-shrink: 0;
+    }
+
+    .walk-icon {
+        width: 140px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+        display: block;
+    }
+
+    .walk-title {
+        display: block;
+        text-decoration: underline;
+        color: var(--accent-ink);
+    }
+
+    .walk-lead {
+        margin: 0.4rem 0 0;
+        font-size: 0.95rem;
+        color: var(--muted);
+        line-height: 1.6;
+    }
+</style>

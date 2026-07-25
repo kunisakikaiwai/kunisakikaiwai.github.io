@@ -1,0 +1,228 @@
+/* =========================================================
+   共通デザインシステム — 国東かいわい / 岐部ハウス
+   このファイルは両サイトで同一内容にする（骨格の統一）。
+   サイト固有の差分は <html> の inline style で CSS 変数
+   （--accent-ink / --rule など）を上書きして表現する。
+   ========================================================= */
+
+:root {
+  --container-width: 860px;
+  --ink: #1a1a1a;
+  --muted: #666;
+  --rule: #ddd;
+  --accent-ink: #333; /* リンク・メニュー色。各サイトで上書き */
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+}
+
+/* ---- フォント体系（言語 × 用途） ---- */
+/* English 読み物 / トップ: 本文セリフ、UI サンセリフ */
+body.en-serif {
+  font-family: Georgia, Cambria, "Times New Roman", "Hiragino Mincho ProN",
+    "Yu Mincho", "Noto Serif JP", serif;
+  line-height: 1.7;
+  color: var(--ink);
+}
+body.en-serif .main-menu,
+body.en-serif .footer-links,
+body.en-serif .lang-switch,
+body.en-serif .title-en,
+body.en-serif .copyright {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+    Arial, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+}
+
+/* その他 English ページ: モダンサンセリフ */
+body.en-sans {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+    Arial, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+/* 日本語 読み物 / トップ: 本文明朝、UI ゴシック */
+body.ja-mincho {
+  font-family: "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Yu Mincho",
+    YuMincho, "Noto Serif JP", "MS Mincho", serif;
+  line-height: 1.9;
+  color: var(--ink);
+}
+body.ja-mincho .main-menu,
+body.ja-mincho .footer-links,
+body.ja-mincho .lang-switch,
+body.ja-mincho .title-en,
+body.ja-mincho .copyright {
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, "Noto Sans JP",
+    Meiryo, sans-serif;
+}
+
+/* その他 日本語ページ: モダンゴシック */
+body.ja-gothic {
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, "Noto Sans JP",
+    Meiryo, sans-serif;
+  line-height: 1.8;
+  color: var(--ink);
+}
+
+/* ---- トップバー（ロゴ + ナビ） ---- */
+/* 下線は全幅、中身は本文コンテナと同じ幅・位置に揃える */
+.site-top {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ロゴを左端・ナビ（右カラム）を右端へ。左右幅は本文コンテナに一致させる */
+.top-bar {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 1.5rem;
+}
+
+.top-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.site-logo a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo-img {
+  height: 130px;
+  width: auto;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .top-bar {
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+
+  .logo-img {
+    height: 80px;
+  }
+}
+
+.title-ja {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.title-en {
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.lang-switch {
+  font-size: 1rem;
+  align-self: flex-end;
+}
+
+.lang-switch a {
+  color: var(--accent-ink);
+}
+
+.main-menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.main-menu a {
+  text-decoration: underline;
+  color: var(--accent-ink);
+}
+
+/* ---- ヘッダー画像 ---- */
+.site-header {
+  height: 250px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.site-header img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---- 本文コンテナ ---- */
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 2.5rem;
+  font-size: 1.2rem;
+}
+
+.container img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---- フッター ---- */
+.footer-divider {
+  border: 0;
+  border-top: 2px solid var(--muted);
+  margin: 3rem 0 2rem 0;
+}
+
+.footer-inner {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-title h3 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.footer-title p {
+  margin: 0.2rem 0 0;
+  line-height: 1.2;
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+
+.footer-links {
+  margin: 1rem 0 0.8rem;
+}
+
+.footer-links a {
+  margin: 0.3rem;
+  text-decoration: none;
+  font-size: 1rem;
+  color: var(--accent-ink);
+}
+
+.footer-message {
+  margin: 0.5rem 0;
+  line-height: 1.3;
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+
+.copyright {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: #999;
+}

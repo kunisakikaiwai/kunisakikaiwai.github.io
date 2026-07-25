@@ -1,0 +1,40 @@
+---
+// 準備中ページの共通コンポーネント。
+// 未公開セクションの URL に置き、公開時はページ本体を差し替えるだけにする。
+import Layout from "../layouts/Layout.astro";
+
+const { title, lang = "jp" } = Astro.props;
+const isEn = lang === "en";
+---
+
+<Layout title={title} lang={lang}>
+    <section class="preparing">
+        <h2>{title}</h2>
+        {
+            isEn ? (
+                <p>
+                    This page is coming soon.
+                    <br />
+                    Please check back later.
+                </p>
+            ) : (
+                <p>
+                    このページはただいま準備中です。
+                    <br />
+                    公開までいましばらくお待ちください。
+                </p>
+            )
+        }
+    </section>
+</Layout>
+
+<style>
+    .preparing {
+        text-align: center;
+        padding: 3rem 0 6rem;
+    }
+
+    .preparing p {
+        color: var(--muted);
+    }
+</style>

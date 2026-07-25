@@ -1,0 +1,90 @@
+---
+// 国東半島峯道ロングトレイル コースマップ集。
+// コースを追加するときは COURSES に1行追加し、
+// 対応する PNG を src/images/PlacesToGo/LongTrail/ に置く。
+import Layout from "../../../layouts/Layout.astro";
+import { getImage } from "astro:assets";
+
+const COURSES = [
+    { file: "LongTrail_T1", title: "豊後高田コース1", start: "熊野磨崖仏", goal: "高山寺" },
+    { file: "LongTrail_T2", title: "豊後高田コース2", start: "高山寺", goal: "並石ダム" },
+    { file: "LongTrail_T3", title: "豊後高田コース3", start: "並石ダム", goal: "真玉温泉 山翆荘" },
+    { file: "LongTrail_T4", title: "豊後高田コース4", start: "真玉温泉 山翆荘", goal: "霊仙寺・実相院・六所宮" },
+    { file: "LongTrail_K1", title: "国東コース1", start: "霊仙寺・実相院・六所宮", goal: "岩戸寺" },
+    { file: "LongTrail_K2", title: "国東コース2", start: "岩戸寺", goal: "文殊仙寺" },
+    { file: "LongTrail_K3", title: "国東コース3", start: "文殊仙寺", goal: "行入ダム公園" },
+    { file: "LongTrail_K4", title: "国東コース4", start: "行入ダム公園", goal: "報恩寺公園" },
+    { file: "LongTrail_K5", title: "国東コース5", start: "報恩寺公園", goal: "梅園の里" },
+    { file: "LongTrail_K6", title: "国東コース6", start: "梅園の里", goal: "両子寺" },
+];
+
+const modules = import.meta.glob(
+    "../../../images/PlacesToGo/LongTrail/*.png",
+    { eager: true },
+);
+const courses = await Promise.all(
+    COURSES.map(async (c) => {
+        const mod = Object.entries(modules).find(([path]) =>
+            path.includes(`${c.file}.png`),
+        );
+        const img = mod ? await getImage({ src: mod[1].default, format: "webp" }) : null;
+        return { ...c, img };
+    }),
+);
+---
+
+<Layout title="国東半島峯道ロングトレイル" lang="jp">
+    <h2>国東半島峯道ロングトレイル</h2>
+
+    <p>コースマップをクリックすると原寸で表示されます。</p>
+
+    {
+        courses.map(({ title, start, goal, img }) => (
+            <section class="course">
+                <h3>{title}</h3>
+                <p class="route">
+                    出発：{start}　→　到着：{goal}
+                </p>
+                {img && (
+                    <a href={img.src} target="_blank" rel="noopener">
+                        <img
+                            src={img.src}
+                            alt={title}
+                            width={img.attributes.width}
+                            height={img.attributes.height}
+                            loading="lazy"
+                            class="course-map"
+                        />
+                    </a>
+                )}
+            </section>
+        ))
+    }
+</Layout>
+
+<style>
+    .course {
+        margin-bottom: 2.5rem;
+    }
+
+    .course h3 {
+        margin-bottom: 0.3rem;
+    }
+
+    .route {
+        margin: 0 0 0.8rem;
+        color: #555;
+    }
+
+    .course-map {
+        width: 50%;
+        height: auto;
+        display: block;
+    }
+
+    @media (max-width: 640px) {
+        .course-map {
+            width: 100%;
+        }
+    }
+</style>

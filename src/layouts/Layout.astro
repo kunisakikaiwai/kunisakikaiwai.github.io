@@ -1,4 +1,6 @@
 ---
+import '../styles/site.css';
+
 const { title, lang = "jp", font } = Astro.props;
 const isEn = lang === "en";
 // font="reading" => serif (en) / mincho (jp); otherwise => sans (en) / gothic (jp)
@@ -44,6 +46,16 @@ const nav = isEn
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" href="/favicon.ico" />
         <title>{pageTitle}</title>
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-H0BRLBY4TY"></script>
+        <script is:inline>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-H0BRLBY4TY');
+        </script>
     </head>
 
     <body class={bodyClass}>
@@ -68,6 +80,13 @@ const nav = isEn
                 <nav class="main-menu">
                     {nav.map((item) => <a href={item.href}>{item.label}</a>)}
                 </nav>
+
+                <style>
+                    /* 国東かいわい側のみ: メニュー項目が多いため共通の 1.15rem より少し小さく */
+                    .main-menu {
+                        font-size: 1rem;
+                    }
+                </style>
             </div>
         </div>
     </header>
@@ -106,202 +125,3 @@ const nav = isEn
     </footer>
 
 </html>
-
-<style>
-  html,
-  body {
-    margin: 0;
-    width: 100%;
-  }
-
-  /* English story / top pages: reading serif for body, sans for UI */
-  body.en-serif {
-    font-family: Georgia, Cambria, "Times New Roman", "Hiragino Mincho ProN",
-      "Yu Mincho", "Noto Serif JP", serif;
-    line-height: 1.7;
-    color: #1a1a1a;
-  }
-
-  body.en-serif .main-menu,
-  body.en-serif .footer-links,
-  body.en-serif .lang-switch,
-  body.en-serif .title-en,
-  body.en-serif .copyright {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
-      Arial, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
-  }
-
-  /* Other English pages (quiz, community, etc.): modern sans */
-  body.en-sans {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
-      Arial, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
-    line-height: 1.7;
-    color: #1a1a1a;
-  }
-
-  /* Japanese story / top pages: Mincho for reading, gothic for UI */
-  body.ja-mincho {
-    font-family: "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Yu Mincho",
-      YuMincho, "Noto Serif JP", "MS Mincho", serif;
-    line-height: 1.9;
-    color: #1a1a1a;
-  }
-
-  body.ja-mincho .main-menu,
-  body.ja-mincho .footer-links,
-  body.ja-mincho .lang-switch,
-  body.ja-mincho .title-en,
-  body.ja-mincho .copyright {
-    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
-      "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, "Noto Sans JP",
-      Meiryo, sans-serif;
-  }
-
-  /* Other Japanese pages (quiz, community, etc.): modern gothic */
-  body.ja-gothic {
-    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
-      "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, "Noto Sans JP",
-      Meiryo, sans-serif;
-    line-height: 1.8;
-    color: #1a1a1a;
-  }
-
-  .site-top {
-    padding: 1rem 2rem;
-    border-bottom: 1px solid #ddd;
-  }
-
-  /* Logo on the left; a right column holds the language switch on the top
-     row and the menu bar below it, aligned to the logo's bottom edge. */
-  .top-bar {
-    display: flex;
-    align-items: stretch;
-    gap: 1.5rem;
-  }
-
-  .top-right {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .site-logo a {
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .logo-img {
-    height: 130px;
-    width: auto;
-    display: block;
-  }
-
-  @media (max-width: 640px) {
-    .top-bar {
-      flex-wrap: wrap;
-      align-items: flex-end;
-    }
-
-    .logo-img {
-      height: 80px;
-    }
-  }
-
-  .title-ja {
-    font-size: 2rem;
-    font-weight: bold;
-  }
-
-  .title-en {
-    font-size: 1rem;
-    color: #666;
-  }
-
-  .lang-switch {
-    font-size: 0.9rem;
-    align-self: flex-end;
-  }
-
-  .main-menu {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 0.5rem 1rem;
-    margin: 0;
-    font-size: 1.0rem;
-  }
-
-  .main-menu a {
-    text-decoration: underline;
-    color: #333;
-  }
-
-  .site-header {
-    height: 250px;
-    overflow: hidden;
-    margin-bottom: 2rem;
-  }
-
-  .site-header img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .container {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 0 2.5rem;
-    font-size: 1.2rem;
-  }
-
-    .footer-divider {
-    border: 0;
-    border-top: 2px solid #666;
-    margin: 3rem 0 2rem 0;
-    }
-
-.footer-inner {
-  max-width: 860px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.footer-title h3 {
-  margin: 0;
-  line-height: 1.2;
-}
-
-.footer-title p {
-  margin: 0.2rem 0 0;
-  line-height: 1.2;
-  font-size: 1.2rem;
-  color: #666;
-}
-
-.footer-links {
-  margin: 1rem 0 0.8rem;
-}
-
-.footer-links a {
-  margin: 0.3rem;
-  text-decoration: none;
-  font-size: 1.0rem;
-}
-
-.footer-message {
-  margin: 0.5rem 0;
-  line-height: 1.3;
-  font-size: 1.2rem;
-  color: #666;
-}
-
-.copyright {
-  margin: 0.5rem 0 0;
-  font-size: 0.8rem;
-  color: #999;
-}
-</style>

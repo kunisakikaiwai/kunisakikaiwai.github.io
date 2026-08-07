@@ -1,32 +1,60 @@
 ---
-// 「いいね」とコメント送信欄。
+// 「いいね」とコメント送信欄（日英対応）。
 // どちらも FormSubmit.co 経由で kunisakikaiwai@gmail.com へメール送信される。
 // コメントはページには表示されない。
+// 注意: FormSubmit の承認はドメインごと。新しいドメインで公開したら、
+// 最初の送信後に届く Activate メールの承認が必要。
 interface Props {
   pageTitle: string;
+  lang?: 'jp' | 'en';
 }
-const { pageTitle } = Astro.props;
+const { pageTitle, lang = 'jp' } = Astro.props;
 const ENDPOINT = 'https://formsubmit.co/ajax/cd8fa2c7d83cb0ec94d0626a19e0ea2f';
+
+const L = lang === 'en' ? {
+  like: '♡ Like',
+  liked: '♥ Liked',
+  sending: 'Sending…',
+  thanks: 'Thank you!',
+  sent: 'Sent. Thank you!',
+  fail: 'Could not send. Please try again later.',
+  summary: 'Send a comment',
+  note: 'Comments are not published on this page. They go directly to the site owner.',
+  name: 'Your name (optional)',
+  message: 'Your thoughts, questions, corrections…',
+  send: 'Send',
+} : {
+  like: '♡ いいね',
+  liked: '♥ いいね済み',
+  sending: '送信中…',
+  thanks: 'ありがとうございます！',
+  sent: '送信しました。ありがとうございます！',
+  fail: '送信できませんでした。時間をおいてお試しください。',
+  summary: 'ご意見・ご感想を送る',
+  note: 'いただいたコメントはページには公開されません。管理人に直接届きます。',
+  name: 'お名前（任意）',
+  message: 'ご感想、お気づきの点などをどうぞ',
+  send: '送信する',
+};
 ---
 
-<section class="feedback" data-endpoint={ENDPOINT} data-page={pageTitle}>
+<section class="feedback" data-endpoint={ENDPOINT} data-page={pageTitle}
+  data-l-liked={L.liked} data-l-sending={L.sending} data-l-thanks={L.thanks}
+  data-l-sent={L.sent} data-l-fail={L.fail}>
   <div class="like-row">
-    <button id="like-btn" type="button" aria-label="いいね">♡ いいね</button>
+    <button id="like-btn" type="button" aria-label="like">{L.like}</button>
     <span id="like-msg" role="status"></span>
   </div>
 
   <details class="comment-box">
-    <summary>ご意見・ご感想を送る</summary>
-    <p class="note">
-      いただいたコメントはページには公開されません。管理人に直接届きます。
-    </p>
+    <summary>{L.summary}</summary>
+    <p class="note">{L.note}</p>
     <form id="comment-form">
-      <input type="text" name="name" placeholder="お名前（任意）" autocomplete="name" />
+      <input type="text" name="name" placeholder={L.name} autocomplete="name" />
       <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" />
-      <textarea name="message" rows="4" required
-        placeholder="ご感想、お気づきの点などをどうぞ"></textarea>
+      <textarea name="message" rows="4" required placeholder={L.message}></textarea>
       <div class="send-row">
-        <button type="submit">送信する</button>
+        <button type="submit">{L.send}</button>
         <span id="comment-msg" role="status"></span>
       </div>
     </form>
@@ -37,6 +65,13 @@ const ENDPOINT = 'https://formsubmit.co/ajax/cd8fa2c7d83cb0ec94d0626a19e0ea2f';
   const root = document.querySelector('.feedback') as HTMLElement;
   const endpoint = root.dataset.endpoint!;
   const page = root.dataset.page!;
+  const L = {
+    liked: root.dataset.lLiked!,
+    sending: root.dataset.lSending!,
+    thanks: root.dataset.lThanks!,
+    sent: root.dataset.lSent!,
+    fail: root.dataset.lFail!,
+  };
 
   async function send(payload: Record<string, string>) {
     const res = await fetch(endpoint, {
@@ -44,8 +79,13 @@ const ENDPOINT = 'https://formsubmit.co/ajax/cd8fa2c7d83cb0ec94d0626a19e0ea2f';
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({ _captcha: 'false', _template: 'table', ページ: page, ...payload }),
     });
-    if (!res.ok) throw new Error(String(res.status));
-    return res.json();
+    let body: any = null;
+    try { body = await res.json(); } catch { /* no body */ }
+    if (!res.ok || (body && body.success === 'false')) {
+      console.error('[feedback] FormSubmit error:', res.status, body);
+      throw new Error(body?.message || String(res.status));
+    }
+    return body;
   }
 
   // いいね
@@ -53,20 +93,20 @@ const ENDPOINT = 'https://formsubmit.co/ajax/cd8fa2c7d83cb0ec94d0626a19e0ea2f';
   const likeMsg = document.getElementById('like-msg')!;
   const likeKey = 'liked:' + location.pathname;
   if (localStorage.getItem(likeKey)) {
-    likeBtn.textContent = '♥ いいね済み';
+    likeBtn.textContent = L.liked;
     likeBtn.disabled = true;
   }
   likeBtn.addEventListener('click', async () => {
     likeBtn.disabled = true;
-    likeMsg.textContent = '送信中…';
+    likeMsg.textContent = L.sending;
     try {
       await send({ _subject: `いいね: ${page}`, 種別: 'いいね' });
       localStorage.setItem(likeKey, '1');
-      likeBtn.textContent = '♥ いいね済み';
-      likeMsg.textContent = 'ありがとうございます！';
+      likeBtn.textContent = L.liked;
+      likeMsg.textContent = L.thanks;
     } catch {
       likeBtn.disabled = false;
-      likeMsg.textContent = '送信できませんでした。時間をおいてお試しください。';
+      likeMsg.textContent = L.fail;
     }
   });
 
@@ -79,7 +119,7 @@ const ENDPOINT = 'https://formsubmit.co/ajax/cd8fa2c7d83cb0ec94d0626a19e0ea2f';
     if ((fd.get('_honey') as string)?.length) return; // bot
     const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
     btn.disabled = true;
-    commentMsg.textContent = '送信中…';
+    commentMsg.textContent = L.sending;
     try {
       await send({
         _subject: `コメント: ${page}`,
@@ -88,9 +128,9 @@ const ENDPOINT = 'https://formsubmit.co/ajax/cd8fa2c7d83cb0ec94d0626a19e0ea2f';
         本文: fd.get('message') as string,
       });
       form.reset();
-      commentMsg.textContent = '送信しました。ありがとうございます！';
+      commentMsg.textContent = L.sent;
     } catch {
-      commentMsg.textContent = '送信できませんでした。時間をおいてお試しください。';
+      commentMsg.textContent = L.fail;
     } finally {
       btn.disabled = false;
     }

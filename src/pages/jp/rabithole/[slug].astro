@@ -3,7 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const posts = Object.values(
-    import.meta.glob('../../../content/jp/rabithole/*.mdx', { eager: true })
+    import.meta.glob('../../../content/jp/rabithole/*.{md,mdx}', { eager: true })
   );
 
   return posts.map((post: any) => ({
@@ -19,7 +19,8 @@ const BlogPost = post.default;
 <Layout title={`${post.frontmatter.title} | 国東界隈`}>
   <main>
     <article>
-      <h2>{post.frontmatter.title}</h2>
+      <div class="series-title">国東界隈、ねほりはほり編</div>
+      <h2>{post.frontmatter.order}: {post.frontmatter.title}</h2>
 
       <div class="meta">
         {post.frontmatter.date}
@@ -35,6 +36,14 @@ const BlogPost = post.default;
 </Layout>
 
 <style>
+  .series-title {
+    color: #666;
+    font-size: 1.05rem;
+    margin-bottom: 0.2rem;
+  }
+  article h2 {
+    margin-top: 0;
+  }
   .meta {
     color: #777;
     font-size: 0.9rem;

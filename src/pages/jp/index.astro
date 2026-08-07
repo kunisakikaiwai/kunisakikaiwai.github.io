@@ -9,7 +9,7 @@ const posts = Object.values(
 )
 
 const items = Object.values(
-    import.meta.glob('../../content/jp/rabithole/*.mdx', { eager: true })
+    import.meta.glob('../../content/jp/rabithole/*.{md,mdx}', { eager: true })
 )
 
   .filter((post: any) => post.frontmatter?.slug)

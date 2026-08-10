@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import StoryFeedback from '../../../components/StoryFeedback.astro';
 
 const posts = Object.values(
   import.meta.glob('../../../content/jp/community/blog/*.mdx', { eager: true })
@@ -8,22 +9,22 @@ const posts = Object.values(
 );
 ---
 
-<Layout title="国東だより | 国東界隈">
+<Layout title="国東とつながる | 国東界隈">
   <main>
-    <h2>国東だより</h2>
+    <h2>国東とつながる</h2>
+
+    <h3>国東だより</h3>
 
     <p>
     国東で見つけた風景、歩いた道、聞いた話、感じたことを共有するコミュニティブログです。<br><br>
-    国東で見つけたものを共有しませんか？
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLScx68DI13wrC7rDrmfEE08Q7DU4XvHkZZZi-OE3_R9iR96cng/viewform?usp=publish-editor">
-          メッセージ
-        </a>
+    国東で見つけたものを共有しませんか？　その他、サイトへのコメント、感想など
+        <a href="#" id="open-message">メッセージ</a>
         を送る
       </p>
 
-    <h3>
+    <h4>
       最近の投稿：
-    </h3>
+    </h4>
 
     <ul class="blog-list">
       {posts.map((post: any) => (
@@ -38,8 +39,28 @@ const posts = Object.values(
         </li>
       ))}
     </ul>
+
+    <h3>このサイトについて</h3>
+
+    <p>
+    このサイトは、国東市のゲストハウス <a href="https://kibehouse.jp/">岐部ハウス</a>のサブサイトとして運営しています。
+    </p>
+
+    <StoryFeedback pageTitle="国東とつながる" />
   </main>
 </Layout>
+
+<script>
+  const openLink = document.getElementById('open-message');
+  openLink?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const box = document.querySelector('.feedback details') as HTMLDetailsElement | null;
+    if (box) {
+      box.open = true;
+      box.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+</script>
 
 <style>
   .blog-list {

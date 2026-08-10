@@ -1,0 +1,45 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+// 宿の一覧。項目を増やすときはここに追加するだけでよい。
+const stays = [
+  {
+    name: '岐部ハウス',
+    url: 'https://kibehouse.jp/',
+    description:
+      '国東の旅のお泊まりは、国東半島の突端あたりの静かな入江のこちらのゲストハウスが便利です。' +
+      '半島に散らばる六郷満山の寺社、史跡などのほとんどに車で10分から一時間以内。' +
+      '宿泊は一泊１グループ限定で、ゆったりとおくつろぎいただけます。',
+  },
+];
+---
+
+<Layout title="国東に泊まる | 国東界隈">
+  <main>
+    <h2>国東に泊まる</h2>
+
+    <ul class="stay-list">
+      {stays.map((stay) => (
+        <li>
+          <h3><a href={stay.url}>{stay.name}</a></h3>
+          <p>{stay.description}</p>
+        </li>
+      ))}
+    </ul>
+  </main>
+</Layout>
+
+<style>
+  .stay-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .stay-list li {
+    margin-bottom: 2rem;
+  }
+
+  .stay-list h3 {
+    margin-bottom: 0.4rem;
+  }
+</style>

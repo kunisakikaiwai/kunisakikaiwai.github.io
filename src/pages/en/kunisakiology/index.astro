@@ -1,12 +1,15 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import StoryFeedback from '../../../components/StoryFeedback.astro';
 const challengeModule = await import('../../../content/en/kunisakiology/challenge.mdx');
 const Challenge = challengeModule.default;
 ---
 
-<Layout title="Kunisaki Love Test | Kunisaki Kaiwai" lang="en">
+<Layout title="Test Your Kunisaki Love | Kunisaki Kaiwai" lang="en">
   <main>
+        <h2>Test Your Kunisaki Love</h2>
         <Challenge />
+        <StoryFeedback pageTitle="Test Your Kunisaki Love" lang="en" />
   </main>
 </Layout>
 

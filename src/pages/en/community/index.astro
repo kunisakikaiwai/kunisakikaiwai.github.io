@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import StoryFeedback from '../../../components/StoryFeedback.astro';
 
 const posts = Object.values(
   import.meta.glob('../../../content/en/community/blog/*.mdx', { eager: true })
@@ -8,21 +9,21 @@ const posts = Object.values(
 );
 ---
 
-<Layout title="Kunisaki Journal | Kunisaki Kaiwai" lang="en">
+<Layout title="Connect | Kunisaki Kaiwai" lang="en">
   <main>
-    <h2>Kunisaki Journal</h2>
+    <h2>Connect</h2>
+
+    <h3>Kunisaki Journal</h3>
 
     <p>
     A community blog for sharing the scenery we've found in Kunisaki, the paths we've walked, the stories we've heard, and the things we've felt.<br><br>
-    Why not share what you've discovered in Kunisaki?
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLScx68DI13wrC7rDrmfEE08Q7DU4XvHkZZZi-OE3_R9iR96cng/viewform?usp=publish-editor">
-          Send us a message
-        </a>.
+    Why not share what you've discovered in Kunisaki? Comments and thoughts about the site are welcome too —
+        <a href="#" id="open-message">send us a message</a>.
       </p>
 
-    <h3>
+    <h4>
       Recent posts:
-    </h3>
+    </h4>
 
     <ul class="blog-list">
       {posts.map((post: any) => (
@@ -37,8 +38,28 @@ const posts = Object.values(
         </li>
       ))}
     </ul>
+
+    <h3>About This Site</h3>
+
+    <p>
+    This site is run as a companion site of <a href="https://kibehouse.jp/en/">Kibe House</a>, a guesthouse in Kunisaki City.
+    </p>
+
+    <StoryFeedback pageTitle="Connect" lang="en" />
   </main>
 </Layout>
+
+<script>
+  const openLink = document.getElementById('open-message');
+  openLink?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const box = document.querySelector('.feedback details') as HTMLDetailsElement | null;
+    if (box) {
+      box.open = true;
+      box.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+</script>
 
 <style>
   .blog-list {

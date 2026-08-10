@@ -1,0 +1,46 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+// List of places to stay. To add more, just append entries here.
+const stays = [
+  {
+    name: 'Kibe House',
+    url: 'https://kibehouse.jp/en/',
+    description:
+      'For your nights in Kunisaki, this guesthouse on a quiet cove near the tip of the peninsula makes a convenient base. ' +
+      'Most of the Rokugo Manzan temples and historic sites scattered across the peninsula are within ' +
+      'ten minutes to an hour by car. Bookings are limited to one group per night, ' +
+      'so you can relax and make the whole house your own.',
+  },
+];
+---
+
+<Layout title="Stay in Kunisaki | Kunisaki Kaiwai" lang="en">
+  <main>
+    <h2>Stay in Kunisaki</h2>
+
+    <ul class="stay-list">
+      {stays.map((stay) => (
+        <li>
+          <h3><a href={stay.url}>{stay.name}</a></h3>
+          <p>{stay.description}</p>
+        </li>
+      ))}
+    </ul>
+  </main>
+</Layout>
+
+<style>
+  .stay-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .stay-list li {
+    margin-bottom: 2rem;
+  }
+
+  .stay-list h3 {
+    margin-bottom: 0.4rem;
+  }
+</style>

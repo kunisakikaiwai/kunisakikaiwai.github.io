@@ -1,12 +1,15 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import StoryFeedback from '../../../components/StoryFeedback.astro';
 const challengeModule = await import('../../../content/jp/kunisakiology/challenge.mdx');
 const Challenge = challengeModule.default;
 ---
 
-<Layout title="国東界隈">
+<Layout title="国東愛を試す | 国東界隈">
   <main>
+        <h2>国東愛を試す</h2>
         <Challenge />
+        <StoryFeedback pageTitle="国東愛を試す" />
   </main>
 </Layout>
 

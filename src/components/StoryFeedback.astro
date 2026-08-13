@@ -10,6 +10,10 @@ interface Props {
 }
 const { pageTitle, lang = 'jp' } = Astro.props;
 const ENDPOINT = 'https://formsubmit.co/ajax/cd8fa2c7d83cb0ec94d0626a19e0ea2f';
+// 「いいね」数カウンター (Google Apps Script + スプレッドシート)。
+// tools/gas-likes/Code.gs をデプロイして得た /exec URL を設定すると数の取得・表示が有効になる。
+// 空文字のままなら従来どおり(メール通知のみ、数の表示なし)。
+const LIKES_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz75HYDQ4JUj57W_abOf0GhDSvcYnindfNCmQZD4_-sIwnH1BaAMtYCrMQW3ozPNLymUg/exec';
 
 const L = lang === 'en' ? {
   like: '♡ Like',
@@ -39,10 +43,12 @@ const L = lang === 'en' ? {
 ---
 
 <section class="feedback" data-endpoint={ENDPOINT} data-page={pageTitle}
+  data-likes-endpoint={LIKES_ENDPOINT}
   data-l-liked={L.liked} data-l-sending={L.sending} data-l-thanks={L.thanks}
   data-l-sent={L.sent} data-l-fail={L.fail}>
   <div class="like-row">
     <button id="like-btn" type="button" aria-label="like">{L.like}</button>
+    <span id="like-count" aria-label="likes count"></span>
     <span id="like-msg" role="status"></span>
   </div>
 
@@ -88,6 +94,24 @@ const L = lang === 'en' ? {
     return body;
   }
 
+  // いいね数カウンター (GAS)。エンドポイント未設定なら何もしない
+  const likesEndpoint = root.dataset.likesEndpoint || '';
+  const likeCountEl = document.getElementById('like-count')!;
+  async function refreshLikes(action?: string) {
+    if (!likesEndpoint) return;
+    try {
+      const url = likesEndpoint + '?page=' + encodeURIComponent(page) + (action ? '&action=' + action : '');
+      const res = await fetch(url);
+      const data = await res.json();
+      if (typeof data.count === 'number' && data.count > 0) {
+        likeCountEl.textContent = String(data.count);
+      }
+    } catch (err) {
+      console.error('[feedback] likes counter error:', err);
+    }
+  }
+  refreshLikes();
+
   // いいね
   const likeBtn = document.getElementById('like-btn') as HTMLButtonElement;
   const likeMsg = document.getElementById('like-msg')!;
@@ -104,6 +128,7 @@ const L = lang === 'en' ? {
       localStorage.setItem(likeKey, '1');
       likeBtn.textContent = L.liked;
       likeMsg.textContent = L.thanks;
+      refreshLikes('like');
     } catch {
       likeBtn.disabled = false;
       likeMsg.textContent = L.fail;
@@ -168,6 +193,16 @@ const L = lang === 'en' ? {
   #like-msg, #comment-msg {
     font-size: 0.85rem;
     color: #666;
+  }
+  #like-count {
+    color: #b8352f;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  #like-count:not(:empty)::before {
+    content: '× ';
+    color: #999;
+    font-weight: 400;
   }
   .comment-box {
     margin-top: 1.2rem;

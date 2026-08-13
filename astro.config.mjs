@@ -1,7 +1,8 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://kunisakikaiwai.github.io',
-  integrations: [mdx()],
+  site: 'https://kunisakikaiwai.jp',
+  integrations: [mdx(), sitemap()],
 });

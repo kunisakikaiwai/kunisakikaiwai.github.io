@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import StoryFeedback from '../../../components/StoryFeedback.astro';
 
 export async function getStaticPaths() {
   const posts = Object.values(
@@ -14,13 +15,15 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const BlogPost = post.default;
+// ランディング(01-top)はシリーズ名と話数の重複表示を避ける
+const isHome = post.frontmatter.slug === '01-top';
 ---
 
 <Layout title={`${post.frontmatter.title} | 国東界隈`}>
   <main>
     <article>
-      <div class="series-title">国東界隈、ねほりはほり編</div>
-      <h2>{post.frontmatter.order}: {post.frontmatter.title}</h2>
+      {!isHome && <div class="series-title">国東界隈、ねほりはほり編</div>}
+      <h2>{isHome ? post.frontmatter.title : `${post.frontmatter.order}: ${post.frontmatter.title}`}</h2>
 
       <div class="meta">
         {post.frontmatter.date}
@@ -30,6 +33,8 @@ const BlogPost = post.default;
       <BlogPost />
 
       <hr />
+
+      <StoryFeedback pageTitle={`ねほりはほり: ${post.frontmatter.title}`} />
 
     </article>
   </main>

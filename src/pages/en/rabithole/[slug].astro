@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import StoryFeedback from '../../../components/StoryFeedback.astro';
 
 export async function getStaticPaths() {
   const posts = Object.values(
@@ -29,6 +30,8 @@ const BlogPost = post.default;
       <BlogPost />
 
       <hr />
+
+      <StoryFeedback pageTitle={`Rabbit Hole: ${post.frontmatter.title}`} lang="en" />
 
     </article>
   </main>

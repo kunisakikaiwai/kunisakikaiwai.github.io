@@ -3,23 +3,45 @@ import Layout from '../../../layouts/Layout.astro';
 import StoryFeedback from '../../../components/StoryFeedback.astro';
 
 export async function getStaticPaths() {
-  const posts = Object.values(
+  const all = Object.values(
     import.meta.glob('../../../content/en/rabithole/*.mdx', { eager: true })
-  );
+  ).filter((post: any) => post.frontmatter?.slug);
 
-  return posts.map((post: any) => ({
-    params: { slug: post.frontmatter.slug },
-    props: { post },
-  }));
+  // Articles (everything except the 01-top landing), in order, for prev/next nav
+  const articles = all
+    .filter((post: any) => post.frontmatter.slug !== '01-top')
+    .sort((a: any, b: any) => (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999));
+
+  return all.map((post: any) => {
+    const index = articles.indexOf(post);
+    return {
+      params: { slug: post.frontmatter.slug },
+      props: {
+        post,
+        prevPost: index > 0 ? articles[index - 1] : null,
+        nextPost: index >= 0 && index < articles.length - 1 ? articles[index + 1] : null,
+      },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, prevPost, nextPost } = Astro.props;
 const BlogPost = post.default;
+// The landing page (01-top) skips the series label and nav
+const isHome = post.frontmatter.slug === '01-top';
 ---
 
 <Layout title={`${post.frontmatter.title} | Kunisaki Kaiwai`} lang="en">
   <main>
     <article>
+      {!isHome && (
+        <nav class="post-nav">
+          <div>{prevPost && <a href={`/en/rabithole/${prevPost.frontmatter.slug}/`}>◀ Previous</a>}</div>
+          <div><a href="/en/rabithole/01-top/">Contents</a></div>
+          <div>{nextPost && <a href={`/en/rabithole/${nextPost.frontmatter.slug}/`}>Next ▶</a>}</div>
+        </nav>
+      )}
+      {!isHome && <div class="series-title">Kunisaki Kaiwai: Down the Rabbit Hole</div>}
       <h2>{post.frontmatter.title}</h2>
 
       <div class="meta">
@@ -38,6 +60,40 @@ const BlogPost = post.default;
 </Layout>
 
 <style>
+  .post-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .post-nav > div {
+    flex: 1;
+  }
+
+  .post-nav > div:nth-child(1) {
+    text-align: left;
+  }
+
+  .post-nav > div:nth-child(2) {
+    text-align: center;
+  }
+
+  .post-nav > div:nth-child(3) {
+    text-align: right;
+  }
+
+  .series-title {
+    color: #666;
+    font-size: 1.05rem;
+    margin-bottom: 0.2rem;
+  }
+  article h2 {
+    margin-top: 0;
+  }
   .meta {
     color: #777;
     font-size: 0.9rem;

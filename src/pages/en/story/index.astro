@@ -1,0 +1,44 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+const chapters = Object.values(
+  import.meta.glob('../../../content/en/story/*.mdx', { eager: true })
+)
+  .filter((post: any) => post.frontmatter?.slug)
+  .sort((a: any, b: any) => {
+    return (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999);
+  });
+---
+
+<Layout title="The Tale of Kunisaki | Kunisaki Kaiwai" lang="en">
+  <main>
+    <h2>The Tale of Kunisaki</h2>
+
+    <p>
+      From a peninsula born of volcanoes to the meeting of gods and buddhas,
+      and the rise of the Rokugo Manzan world — 1,300 years of history told in eleven tales.
+    </p>
+
+    <ul class="toc">
+      {chapters.map((post: any) => (
+        <li>
+          <a href={`/en/story/${post.frontmatter.slug}/`}>
+            {post.frontmatter.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <p>
+      Curious about the questions the tales left open?
+      Follow us <a href="/en/rabithole/01-top/">down the rabbit hole</a>.
+    </p>
+  </main>
+</Layout>
+
+<style>
+  .toc {
+    list-style: none;
+    padding-left: 0;
+  }
+</style>

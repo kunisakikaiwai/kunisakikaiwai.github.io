@@ -3,27 +3,46 @@ import Layout from '../../../layouts/Layout.astro';
 import StoryFeedback from '../../../components/StoryFeedback.astro';
 
 export async function getStaticPaths() {
-  const posts = Object.values(
+  const all = Object.values(
     import.meta.glob('../../../content/jp/rabithole/*.{md,mdx}', { eager: true })
-  );
+  ).filter((post: any) => post.frontmatter?.slug);
 
-  return posts.map((post: any) => ({
-    params: { slug: post.frontmatter.slug },
-    props: { post },
-  }));
+  // 記事(01-top以外)を order 順に並べ、前後ナビの対象にする
+  const articles = all
+    .filter((post: any) => post.frontmatter.slug !== '01-top')
+    .sort((a: any, b: any) => (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999));
+
+  return all.map((post: any) => {
+    const index = articles.indexOf(post);
+    return {
+      params: { slug: post.frontmatter.slug },
+      props: {
+        post,
+        prevPost: index > 0 ? articles[index - 1] : null,
+        nextPost: index >= 0 && index < articles.length - 1 ? articles[index + 1] : null,
+      },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, prevPost, nextPost } = Astro.props;
 const BlogPost = post.default;
-// ランディング(01-top)はシリーズ名と話数の重複表示を避ける
+// ランディング(01-top)はシリーズ名・ナビを省略
 const isHome = post.frontmatter.slug === '01-top';
 ---
 
 <Layout title={`${post.frontmatter.title} | 国東界隈`}>
   <main>
     <article>
+      {!isHome && (
+        <nav class="post-nav">
+          <div>{prevPost && <a href={`/jp/rabithole/${prevPost.frontmatter.slug}/`}>◀ 前へ</a>}</div>
+          <div><a href="/jp/rabithole/01-top/">目次</a></div>
+          <div>{nextPost && <a href={`/jp/rabithole/${nextPost.frontmatter.slug}/`}>次へ ▶</a>}</div>
+        </nav>
+      )}
       {!isHome && <div class="series-title">国東界隈、ねほりはほり編</div>}
-      <h2>{isHome ? post.frontmatter.title : `${post.frontmatter.order}: ${post.frontmatter.title}`}</h2>
+      <h2>{post.frontmatter.title}</h2>
 
       <div class="meta">
         {post.frontmatter.date}
@@ -41,6 +60,32 @@ const isHome = post.frontmatter.slug === '01-top';
 </Layout>
 
 <style>
+  .post-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .post-nav > div {
+    flex: 1;
+  }
+
+  .post-nav > div:nth-child(1) {
+    text-align: left;
+  }
+
+  .post-nav > div:nth-child(2) {
+    text-align: center;
+  }
+
+  .post-nav > div:nth-child(3) {
+    text-align: right;
+  }
+
   .series-title {
     color: #666;
     font-size: 1.05rem;

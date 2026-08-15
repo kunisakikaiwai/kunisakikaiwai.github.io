@@ -15,7 +15,7 @@ const posts = Object.values(
 const items = Object.values(
     import.meta.glob('../../content/en/rabithole/*.mdx', { eager: true })
 )
-  .filter((item: any) => item.frontmatter?.slug)
+  .filter((item: any) => item.frontmatter?.slug && item.frontmatter.slug !== '01-top')
   .sort((a: any, b: any) => {
     return (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999);
   });
@@ -27,13 +27,13 @@ const items = Object.values(
     <div class="top-row">
     </div>
     </header>
-    <h2>The Tale of Kunisaki</h2>
+    <h2><a href="/en/story/">The Tale of Kunisaki</a></h2>
     <div class="preface">
         <Preface />
     </div>
 
     <h3>Contents</h3>
-    <ol class="toc">
+    <ul class="toc">
       {posts.map((post: any) => (
         <li>
           <a href={`/en/story/${post.frontmatter.slug}/`}>
@@ -41,14 +41,10 @@ const items = Object.values(
           </a>
         </li>
       ))}
-    </ol>
+    </ul>
 
-    <h2>Kunisaki: Down the Rabbit Hole</h2>
-
-    <h4>
-    Coming Soon
-    </h4>
-    <ol class="toc">
+    <h2><a href="/en/rabithole/01-top/">Kunisaki: Down the Rabbit Hole</a></h2>
+    <ul class="toc">
       {items.map((item: any) => (
         <li>
           <a href={`/en/rabithole/${item.frontmatter.slug}/`}>
@@ -56,7 +52,7 @@ const items = Object.values(
           </a>
         </li>
       ))}
-    </ol>
+    </ul>
 
     <h2>Test Your Kunisaki Love</h2>
     <div>
@@ -68,6 +64,11 @@ const items = Object.values(
 </Layout>
 
 <style>
+  .toc {
+    list-style: none;
+    padding-left: 0;
+  }
+
     .preface :global(p) {
     margin: 0.3rem 0;
     line-height: 1.4;

@@ -27,18 +27,18 @@ const nav = isEn
   ? [
       { href: `${base}/`, label: "Home" },
       { href: `${base}/feel/`, label: "Feel Kunisaki" },
-      { href: `${base}/`, label: "Learn Kunisaki" },
+      { href: `${base}/story/`, label: "The Tale of Kunisaki" },
+      { href: `${base}/rabithole/01-top/`, label: "Down the Rabbit Hole" },
       { href: `${base}/walk/`, label: "Walk Kunisaki" },
-      { href: `${base}/stay/`, label: "Stay in Kunisaki" },
       { href: `${base}/kunisakiology/`, label: "Test Your Kunisaki Love" },
       { href: `${base}/community/`, label: "Connect" },
     ]
   : [
       { href: `${base}/`, label: "ホーム" },
       { href: `${base}/feel/`, label: "国東を感じる" },
-      { href: `${base}/`, label: "国東を知る" },
+      { href: `${base}/story/`, label: "国東物語" },
+      { href: `${base}/rabithole/01-top/`, label: "国東ねほりはほり" },
       { href: `${base}/walk/`, label: "国東を歩く" },
-      { href: `${base}/stay/`, label: "国東に泊まる" },
       { href: `${base}/kunisakiology/`, label: "国東愛を試す" },
       { href: `${base}/community/`, label: "国東とつながる" },
     ];
@@ -128,15 +128,13 @@ const nav = isEn
 
         <div class="footer-title">
         <h3>国東界隈 | Kunisaki Kaiwai</h3>
+        <p class="copyright">© 2026 Kunisaki Kaiwai</p>
         </div>
 
         <nav class="footer-links">
         {nav.map((item) => <a href={item.href}>{item.label}</a>)}
         </nav>
 
-        <p class="copyright">
-        © 2026 Kunisaki Kaiwai
-        </p>
 
         </div>
     </footer>

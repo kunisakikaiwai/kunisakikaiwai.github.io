@@ -24,13 +24,13 @@ const items = Object.values(
     <div class="top-row">
     </div>
     </header>
-    <h2>国東物語</h2>
+    <h2><a href="/jp/story/">国東物語</a></h2>
     <div class="preface">
         <Preface />
     </div>
 
     <h3>もくじ</h3>
-    <ol class="toc">
+    <ul class="toc">
       {posts.map((post: any) => (
         <li>
           <a href={`/jp/story/${post.frontmatter.slug}/`}>
@@ -38,10 +38,10 @@ const items = Object.values(
           </a>
         </li>
       ))}
-    </ol>
+    </ul>
 
     <h2><a href="/jp/rabithole/01-top/">国東ねほりはほり</a></h2>
-    <ol class="toc">
+    <ul class="toc">
       {items.map((item: any) => (
         <li>
           <a href={`/jp/rabithole/${item.frontmatter.slug}/`}>
@@ -49,7 +49,7 @@ const items = Object.values(
           </a>
         </li>
       ))}
-    </ol>
+    </ul>
     
     <h2>国東愛を試す</h2>
 　　 <div>
@@ -63,6 +63,11 @@ const items = Object.values(
 </Layout>
 
 <style>
+  .toc {
+    list-style: none;
+    padding-left: 0;
+  }
+
     .preface :global(p) {
     margin: 0.3rem 0;
     line-height: 1.4;

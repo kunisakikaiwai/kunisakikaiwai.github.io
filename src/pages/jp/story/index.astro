@@ -1,0 +1,44 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+const chapters = Object.values(
+  import.meta.glob('../../../content/jp/story/*.mdx', { eager: true })
+)
+  .filter((post: any) => post.frontmatter?.slug)
+  .sort((a: any, b: any) => {
+    return (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999);
+  });
+---
+
+<Layout title="国東物語 | 国東界隈">
+  <main>
+    <h2>国東物語</h2>
+
+    <p>
+      火山が生んだ半島に、宇佐の神と山の仏が出会い、六郷満山という独特の世界が育つまで——
+      1300年の歩みを全11章でたどる物語です。
+    </p>
+
+    <ul class="toc">
+      {chapters.map((post: any) => (
+        <li>
+          <a href={`/jp/story/${post.frontmatter.slug}/`}>
+            {post.frontmatter.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <p>
+      本編で積み残した「そもそも」の疑問は、
+      <a href="/jp/rabithole/01-top/">国東ねほりはほり</a>で掘り下げています。
+    </p>
+  </main>
+</Layout>
+
+<style>
+  .toc {
+    list-style: none;
+    padding-left: 0;
+  }
+</style>

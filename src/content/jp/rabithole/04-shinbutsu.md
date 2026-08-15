@@ -1,5 +1,5 @@
 ---
-title: "あえて言うの？神仏習合"
+title: "4. あえて言うの？神仏習合"
 order: 4
 slug: "04-shinbutsu"
 ---

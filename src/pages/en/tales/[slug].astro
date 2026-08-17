@@ -1,0 +1,82 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import StoryFeedback from '../../../components/StoryFeedback.astro';
+
+export async function getStaticPaths() {
+  const posts = Object.values(
+    import.meta.glob('../../../content/en/tales/*.mdx', { eager: true })
+  )
+    .filter((post: any) => post.frontmatter?.slug && !post.frontmatter?.draft)
+    .sort((a: any, b: any) => (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999));
+
+  return posts.map((post: any, index: number) => ({
+    params: { slug: post.frontmatter.slug },
+    props: {
+      post,
+      prevPost: posts[index - 1] ?? null,
+      nextPost: posts[index + 1] ?? null,
+    },
+  }));
+}
+
+const { post, prevPost, nextPost } = Astro.props;
+const Content = post.default;
+const fm = post.frontmatter;
+---
+
+<Layout title={`${fm.title} | Kunisaki Stories`} lang="en" font="reading" description={fm.summary}>
+  <main>
+    <nav class="post-nav">
+      <div>{prevPost && <a href={`/en/tales/${prevPost.frontmatter.slug}/`}>◀ Prev</a>}</div>
+      <div><a href="/en/tales/">Kunisaki Stories: Contents</a></div>
+      <div>{nextPost && <a href={`/en/tales/${nextPost.frontmatter.slug}/`}>Next ▶</a>}</div>
+    </nav>
+
+    <p class="fiction-note">
+      This is a work of fiction, built on historical sources and local tradition.
+      Where the record ends and imagination begins is laid out in “The Materials” at the end.
+    </p>
+
+    <p class="era-line">{fm.era}{fm.period && `, ${fm.period}`}</p>
+    <h1>{fm.title}</h1>
+
+    <article class="tale">
+      <Content />
+    </article>
+
+    <StoryFeedback pageTitle={`Stories: ${fm.title}`} lang="en" />
+  </main>
+</Layout>
+
+<style>
+  .post-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+  .post-nav > div { flex: 1; }
+  .post-nav > div:nth-child(1) { text-align: left; }
+  .post-nav > div:nth-child(2) { text-align: center; }
+  .post-nav > div:nth-child(3) { text-align: right; }
+
+  .fiction-note {
+    padding: 0.6rem 1rem;
+    border-left: 3px solid #8a939b;
+    background: #f5f5f2;
+    border-radius: 4px;
+    font-size: 0.92em;
+    color: #444;
+  }
+  .era-line { margin: 1.6rem 0 0; color: #666; font-size: 0.95em; }
+  h1 { margin-top: 0.2rem; }
+  .tale { line-height: 1.9; }
+  .tale :global(h2) {
+    margin-top: 3rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #ddd;
+    font-size: 1.1em;
+  }
+</style>

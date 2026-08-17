@@ -35,6 +35,7 @@ const Content = post.default;
       <div>{nextPost && <a href={`/jp/story/${nextPost.frontmatter.slug}/`}>次へ ▶</a>}</div>
     </nav>
 
+    <p class="series-line"><a href="/jp/story/">国東物語</a> ― 史料でたどる国東1300年</p>
     <h1>{post.frontmatter.title}</h1>
 
     <article>
@@ -46,6 +47,13 @@ const Content = post.default;
 </Layout>
 
 <style>
+  .series-line {
+    margin: 0 0 0.2rem;
+    color: #666;
+    font-size: 0.9em;
+  }
+  .series-line a { color: inherit; text-decoration: none; }
+  h1 { margin-top: 0; }
   .post-nav {
     display: flex;
     justify-content: space-between;

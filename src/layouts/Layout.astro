@@ -1,7 +1,8 @@
 ---
 import '../styles/site.css';
 
-const { title, lang = "jp", font, description } = Astro.props;
+// noindex: 準備中ページなど、検索結果に出したくないページで true にする
+const { title, lang = "jp", font, description, noindex = false } = Astro.props;
 const isEn = lang === "en";
 // font="reading" => serif (en) / mincho (jp); otherwise => sans (en) / gothic (jp)
 const reading = font === "reading" || font === "mincho";
@@ -27,8 +28,9 @@ const nav = isEn
   ? [
       { href: `${base}/`, label: "Home" },
       { href: `${base}/feel/`, label: "Feel Kunisaki" },
-      { href: `${base}/story/`, label: "The Tale of Kunisaki" },
+      { href: `${base}/story/`, label: "The Kunisaki Chronicle" },
       { href: `${base}/rabithole/01-top/`, label: "Down the Rabbit Hole" },
+      { href: `${base}/tales/`, label: "Kunisaki Stories" },
       { href: `${base}/walk/`, label: "Walk Kunisaki" },
       { href: `${base}/kunisakiology/`, label: "Test Your Kunisaki Love" },
       { href: `${base}/community/`, label: "Connect" },
@@ -38,6 +40,7 @@ const nav = isEn
       { href: `${base}/feel/`, label: "国東を感じる" },
       { href: `${base}/story/`, label: "国東物語" },
       { href: `${base}/rabithole/01-top/`, label: "国東ねほりはほり" },
+      { href: `${base}/tales/`, label: "国東草子" },
       { href: `${base}/walk/`, label: "国東を歩く" },
       { href: `${base}/kunisakiology/`, label: "国東愛を試す" },
       { href: `${base}/community/`, label: "国東とつながる" },
@@ -55,6 +58,7 @@ const nav = isEn
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
         <link rel="canonical" href={canonicalURL} />
+        {noindex && <meta name="robots" content="noindex" />}
         <meta property="og:site_name" content="国東界隈 Kunisaki Kaiwai" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={pageTitle} />

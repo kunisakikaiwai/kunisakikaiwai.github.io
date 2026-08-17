@@ -1,34 +1,105 @@
 ---
 // 国東半島峯道ロングトレイル コースマップ集。
-// コースを追加するときは COURSES に1行追加し、
-// 対応する PNG を src/images/PlacesToGo/LongTrail/ に置く。
+// 掲載画像は国東半島峯道ロングトレイル公式マップ（2023版）。観光協会から掲載許可取得済み。
+// 原本PDFは 素材/ロングトレイル/トレイルマップ.pdf（.gitignore対象）。
+// 画像の作り方: pdftoppm -jpeg -jpegopt quality=82 -r 200 -f <頁> -l <頁> -singlefile
+//   （p2=全域マップ、p3〜p12=T1〜T4・K1〜K6。K-6のページはスキャンが天地逆なので sips -r 180）
 import Layout from "../../../layouts/Layout.astro";
 import { getImage } from "astro:assets";
 
+// 経由地は公式マップ2023版の見出し（K-5・K-6は標高グラフの目盛）から。距離は公式サイトのコース表。
 const COURSES = [
-    { file: "LongTrail_T1", title: "豊後高田コース1", start: "熊野磨崖仏", goal: "高山寺" },
-    { file: "LongTrail_T2", title: "豊後高田コース2", start: "高山寺", goal: "並石ダム" },
-    { file: "LongTrail_T3", title: "豊後高田コース3", start: "並石ダム", goal: "真玉温泉 山翆荘" },
-    { file: "LongTrail_T4", title: "豊後高田コース4", start: "真玉温泉 山翆荘", goal: "霊仙寺・実相院・六所宮" },
-    { file: "LongTrail_K1", title: "国東コース1", start: "霊仙寺・実相院・六所宮", goal: "岩戸寺" },
-    { file: "LongTrail_K2", title: "国東コース2", start: "岩戸寺", goal: "文殊仙寺" },
-    { file: "LongTrail_K3", title: "国東コース3", start: "文殊仙寺", goal: "行入ダム公園" },
-    { file: "LongTrail_K4", title: "国東コース4", start: "行入ダム公園", goal: "報恩寺公園" },
-    { file: "LongTrail_K5", title: "国東コース5", start: "報恩寺公園", goal: "梅園の里" },
-    { file: "LongTrail_K6", title: "国東コース6", start: "梅園の里", goal: "両子寺" },
+    { file: "LongTrail_T1", title: "豊後高田コース1", start: "熊野磨崖仏", goal: "高山寺", km: "11.5",
+      via: "真木大堂・穴井戸観音・朝日夕日観音・田染荘・空木峠池",
+      note: `<p>十年に一度の<a href="/jp/rabithole/05-mineiri/">峯入行</a>は、<a href="/jp/story/08-rokugo-peak/">熊野磨崖仏</a>の前で開白（かいびゃく）の護摩を焚いて始まります。つまりこの道は、現代の峯入りの出発点でもあります。</p>
+<p>歩き出せば<a href="/jp/story/01-volcano/">真木大堂</a>——散り散りになった寺々の仏像が集められた堂——を過ぎ、<a href="/jp/story/04-shoen/">田染荘</a>の谷へ下ります。中世の地割りをとどめる、日本でも稀な農村風景です。そして登りついた<a href="/jp/story/07-rokugoStared/">西叡山高山寺</a>は、かつて六郷満山65か寺を束ねた惣山（そうざん）。<strong>磨崖仏、荘園、満山の頂点。この半島の骨格が、一日でひととおり出そろう道です。</strong></p>`,
+      terrain: `見どころが集中する前半と、西叡山への登り。高山寺へ登らない場合は里中歩きの色が濃くなります`,
+      voice: `<p><strong>王道の一本です。</strong>ただし西叡山高山寺への登りを省くと、後半は里の中を歩く道になります。逆に言えば、ほたるの館あたりで切り上げても見どころは十分。磨崖仏と真木大堂と田染荘に半日かけたい人は、その方が幸せかもしれません。</p>` },
+    { file: "LongTrail_T2", title: "豊後高田コース2", start: "高山寺", goal: "並石ダム", km: "15.2",
+      via: "岩脇寺・平原金政の里・富貴寺・センホウシ線入口・山神社・海神社",
+      note: `<p>山を下りて、里の寺をつなぐ道。途中の<a href="/jp/story/08-rokugo-peak/">富貴寺</a>大堂は、平安の姿のまま生き延びた九州最古の木造堂宇（国宝）です。堂内の壁には阿弥陀の浄土が描かれています。</p>
+<p>山中の岩屋で行をする世界と、里にこれほどの阿弥陀堂が建つ世界。両方が同じ半島にあったのは、<a href="/jp/story/04-shoen/">荘園</a>の富が満山に流れ込んでいたからでした。<strong>修行の道を歩きながら、その修行を支えた経済のほうも通り過ぎることになります。</strong></p>`,
+      terrain: `里と低山をつなぐ道。人に会わない静かな区間が長く続きます`,
+      voice: `<p>主役は富貴寺です。ほかは静かな里と低山が続くので、<strong>「寺から寺へ急ぐ道」ではなく「富貴寺に長く座るための道」</strong>と考えるとちょうどいい。人の少ない道をひたすら歩きたい日にも向きます。</p>` },
+    { file: "LongTrail_T3", title: "豊後高田コース3", start: "並石ダム", goal: "真玉温泉 山翆荘", km: "12.2",
+      via: "長安寺・天念寺・川中不動・無動寺・応暦寺",
+      note: `<p><a href="/jp/story/10-after-fes/">天念寺</a>の谷を通ります。寺の前の長岩屋川には、川の中の巨岩に不動三尊を刻んだ川中不動。氾濫を鎮めるための祈りが、そのまま岩に残っています。背後には天念寺耶馬（やば）の岩峰が立ち、稜線には無明橋——彼岸へ渡る橋——が架かります。</p>
+<p>この谷は<a href="/jp/story/08-rokugo-peak/">修正鬼会（しゅじょうおにえ）</a>が今も続く場所でもあります。国東では、鬼は払われる悪者ではなく、松明を掲げて福を配る仏の使いです。道の起点近くの長安寺は、鎌倉時代に高山寺から満山の惣山を引き継いだ寺でした。</p>`,
+      terrain: `六郷満山の寺を5か所たどる、訪問先の密度は随一の道。ただし舗装路の割合が高めです`,
+      voice: `<p>六郷満山の寺が5か所、天念寺の無明橋、「鬼会の里」歴史資料館。<strong>訪ねる先の密度は全10コースで随一</strong>です。いっぽうで舗装路の割合が高いので、山道の感触を求めて来ると物足りなく感じるかもしれません。「歩く日」というより「巡る日」に向く道です。</p>
+<p>天念寺は、鬼会の時期をはずすと、山あいにひっそりと講堂と堂宇が建つだけの場所です。堂をのぞくと、<strong>鬼会で使われる巨大な松明</strong>が置かれています。鬼会の舞台になる川の対岸に立って、川中不動から本堂までをひと渡り眺め、それから隣の「鬼会の里」歴史資料館で映像を見る。<strong>そうやって本物の鬼会を想像するのが、時期外れに訪ねたときのいちばんの歩き方</strong>かもしれません。資料館には、見上げる耶馬に架かる<strong>無明橋の実物大の模型</strong>も展示されています。</p>` },
+    { file: "LongTrail_T4", title: "豊後高田コース4", start: "真玉温泉 山翆荘", goal: "霊仙寺・実相院・六所宮", km: "11.5",
+      via: "猪群山・飯牟礼神社・中山仙境",
+      note: `<p>このコースの主役は<a href="/jp/story/10-after-fes/">中山仙境</a>。夷谷（えびすだに）の岩峰の尾根を、鎖場伝いにたどる修験の行場で、ここにも無明橋が架かります。<a href="/jp/story/08-rokugo-peak/">「半島をめぐる修験のネットワーク」</a>の景観が、最も濃く残っている一帯です。</p>
+<p>途中の猪群山には、山頂近くに巨石が環を描いて立っています。<strong>足元に気を使う時間が長いぶん、「歩くことが修行だった」という言葉がいちばん実感できるのが、この道かもしれません。</strong></p>`,
+      terrain: `岩峰の一帯を行く道。ただし中山仙境の無明橋は正規ルートに含まれません`,
+      voice: `<p>じつは<strong>正規ルートは中山仙境の無明橋を通りません</strong>。時間がかかり危険も伴うので、ルートが外しているのは妥当です。ただ、個人で歩くなら、寄らないのはもったいない。無理をしない前提で、この道のいちばんの見どころはそこにあります。</p>` },
+    { file: "LongTrail_K1", title: "国東コース1", start: "霊仙寺・実相院・六所宮", goal: "岩戸寺", km: "11.0",
+      via: "西方寺の里・大不動岩屋・旧千燈寺・五辻不動",
+      note: `<p><a href="/jp/story/09-rokugo-collapse/">旧千燈寺跡</a>を通ります。仁聞が最初に開いたと伝わり「西の高野山」とも呼ばれた巨刹の、焼き討ちのあとです。木造の建物はほとんど残らず、石垣と礎石、そして千基におよぶ五輪塔の群れが林の中に続きます。</p>
+<p>尾根を登りつめると<a href="/jp/rabithole/05-mineiri/">五辻不動</a>。海の龍王が仁聞に千の燈を献じたと伝わる岩屋で、千燈寺の名の由来にあたる場所です。断崖にはアントニー・ゴームリーの鉄の人が、瀬戸内海を見下ろして立っています。終点の岩戸寺には、銘のある国東塔として現存最古（1283年）の塔があり、<a href="/jp/story/08-rokugo-peak/">修正鬼会</a>も伝わります。</p>`,
+      terrain: `峯を4つ越えます。11kmという数字以上に歩きごたえがあります`,
+      voice: `<p>峯を4つ越え、見どころも濃い<strong>王道の一本</strong>。ただし<strong>11キロを甘く見ないこと</strong>。K-1とK-2を続けて一日で歩けないか、という問い合わせがよくあるそうですが、やめておいたほうがいい、というのが歩いた人たちの答えです。</p>` },
+    { file: "LongTrail_K2", title: "国東コース2", start: "岩戸寺", goal: "文殊仙寺", km: "8.9",
+      via: "長慶寺・山口池・葛原集落跡・ゴロタ平",
+      note: `<p>終点の<a href="/jp/story/01-volcano/">文殊仙寺</a>は、背後の文殊山と一体になった山岳寺院。国東の寺は建物だけでなく、岩峰ごと信仰の対象でした。<a href="/jp/story/08-rokugo-peak/">最盛期の満山</a>を代表する寺のひとつでもあります。</p>
+<p>道の途中には、人の去った葛原の集落跡を通ります。<strong>栄えた寺と、消えた集落。千年のあいだにこの半島で起きたことが、同じ一日の行程に並んでいます。</strong></p>`,
+      terrain: `全10コースで最短。ただし後半はほぼ登りが続きます`,
+      voice: `<p>後半はほぼ登りなので、体力を後ろに残しておく道です。そのぶん静けさがあります。葛原の集落跡で、<strong>6月の小鳥のさえずりをひとりで聴く</strong>——このトレイル屈指の贅沢として挙がる時間です。誰かと連れ立つより、ひとりで来る道かもしれません。</p>` },
+    { file: "LongTrail_K3", title: "国東コース3", start: "文殊仙寺", goal: "行入ダム公園", km: "15.5",
+      via: "成仏寺・帝釈堂・神宮寺・行入寺",
+      note: `<p>谷をひとつ越えるごとに寺が現れる、六郷満山らしい道です。成仏寺には<a href="/jp/story/08-rokugo-peak/">修正鬼会</a>が伝わります。天念寺・岩戸寺とあわせ、鬼が松明を担いで里を回る行事が、いまも谷ごとに生きています。</p>
+<p><a href="/jp/story/01-volcano/">火山がつくった放射状の谷</a>は、それぞれが独立した小さな世界でした。谷ごとに寺があり、その寺々を峰の道が結んでいた——歩くと、その構造がそのまま足で分かります。</p>`,
+      terrain: `全10コースで最長。谷ごとに寺が現れます`,
+      voice: `<p>この道でいちばん静かに効くのは、神宮寺の奥の院に広がる<strong>苔の絨毯</strong>です。緑の上に光が落ちる時間に当たると、しばらく動けなくなります。</p>
+<p>道中には、岩を生かした現代の作品も置かれています。国東は千年ものあいだ、岩壁に仏を刻み、岩屋を堂にしてきた土地です。<a href="/jp/story/01-volcano/">岩そのものを信仰の場としてきた歴史</a>の延長に、いまも岩に手を入れる人がいる——そう思って眺めると、<a href="/jp/rabithole/05-mineiri/">五辻不動のゴームリー像</a>との共通点も見えてきます。</p>` },
+    { file: "LongTrail_K4", title: "国東コース4", start: "行入ダム公園", goal: "報恩寺公園", km: "13.4",
+      via: "赤松の里・狭間新池・丸小野寺・報恩寺",
+      note: `<p>ため池をいくつも数える、里に近い道です。<a href="/jp/story/01-volcano/">火山が生んだ半島</a>は、標高こそ高くないものの水を蓄えにくい地形で、人々はため池を掘って谷ごとの田を養ってきました。</p>
+<p>峰の行場のような派手さはありませんが、<a href="/jp/story/04-shoen/">荘園</a>の時代から続く暮らしの側の風景が、いちばん素直に見える区間です。</p>`,
+      terrain: `ため池と里をつなぐ、起伏のおだやかな道`,
+      voice: `<p>この一帯は世界農業遺産ですが、<strong>歩いていて、それが見えるかというと正直わかりにくい</strong>。逆に言えば、予備知識を持って歩くと化ける道です。ため池とクヌギ林と田がどうつながって回っているかを頭に入れてから歩くと、同じ風景が資料に見えてきます。</p>` },
+    { file: "LongTrail_K5", title: "国東コース5", start: "報恩寺公園", goal: "梅園の里", km: "14.3",
+      via: "楽庭神社・吉弘城跡・西光寺・光蓮寺・三浦梅園旧宅",
+      note: `<p>時代がぐっと下る道です。吉弘城跡は、<a href="/jp/story/09-rokugo-collapse/">戦国</a>の在地武士の城のあと。満山が焼かれた時代を、寺の側からではなく武士の側から眺めることになります。</p>
+<p>終盤には三浦梅園旧宅。江戸時代、この半島で独自の自然哲学を築いた思想家の家です。<a href="/jp/story/10-after-fes/">再興の時代</a>の国東には、こういう人も暮らしていました。</p>`,
+      terrain: `長い道です。史跡は予備知識がないと通り過ぎがち`,
+      voice: `<p>とにかく<strong>長い</strong>。そして吉弘城跡も三浦梅園も、予備知識がないと通り過ぎてしまいます。トレイルのあとに梅園の資料館へ寄っても、疲れていて頭に入ってこない、という声があります。<strong>資料館は別の日に、体力のあるうちに</strong>——実際に歩いた人でなければ出てこない助言です。</p>` },
+    { file: "LongTrail_K6", title: "国東コース6", start: "梅園の里", goal: "両子寺", km: "12.0",
+      via: "龍頭大明神・諸田山神社・走水観音分岐・両子山",
+      note: `<p>最後は<a href="/jp/story/01-volcano/">両子山</a>へ。半島の中心にそびえる火山で、ここから放射状に伸びた尾根と谷が、この半島のすべての舞台をつくりました。全10コースを歩いてきた人は、自分がたどった谷を上から見渡すことになります。</p>
+<p>そして<a href="/jp/rabithole/05-mineiri/">峯入行</a>が結願（けちがん）を迎えるのが、終点の両子寺です。<strong>千年のあいだ、峰の道を歩き通した僧たちがたどり着いた場所に、いまは誰でも自分の足で立つことができます。</strong></p>`,
+      terrain: `両子山への登り。山頂周回だけを歩くこともできます`,
+      voice: `<p>結願の道ですが、歩いた人たちの本音は<strong>「両子山だけでもいい」</strong>。山頂の周回だけでも、半島の中心から自分の歩いた谷を見渡せます。全10コースを歩き通した人の締めくくりであると同時に、<strong>最初の一本にもなる</strong>——両極端に使える道です。</p>` },
 ];
 
 const modules = import.meta.glob(
-    "../../../images/PlacesToGo/LongTrail/*.png",
+    "../../../images/PlacesToGo/LongTrail/*.jpg",
     { eager: true },
 );
+
+const overallModule = Object.entries(modules).find(([path]) =>
+    path.includes("LongTrail_Overall.jpg"),
+);
+const overall = overallModule
+    ? await getImage({ src: overallModule[1].default, format: "webp", width: 1400 })
+    : null;
+const overallFull = overallModule
+    ? await getImage({ src: overallModule[1].default, format: "webp" })
+    : null;
 const courses = await Promise.all(
     COURSES.map(async (c) => {
         const mod = Object.entries(modules).find(([path]) =>
-            path.includes(`${c.file}.png`),
+            path.includes(`${c.file}.jpg`),
         );
-        const img = mod ? await getImage({ src: mod[1].default, format: "webp" }) : null;
-        return { ...c, img };
+        // img=ページ表示用（幅1400）、full=クリックで開く原寸
+        const img = mod
+            ? await getImage({ src: mod[1].default, format: "webp", width: 1400 })
+            : null;
+        const full = mod
+            ? await getImage({ src: mod[1].default, format: "webp" })
+            : null;
+        return { ...c, img, full };
     }),
 );
 ---
@@ -36,17 +107,102 @@ const courses = await Promise.all(
 <Layout title="国東半島峯道ロングトレイル" lang="jp">
     <h2>国東半島峯道ロングトレイル</h2>
 
-    <p>コースマップをクリックすると原寸で表示されます。</p>
+    <div class="trail-intro">
+        <p>
+            熊野磨崖仏から両子寺まで、半島を斜めに横切って全10コース。
+            通して歩けば120キロを超えます。
+        </p>
+        <p>
+            ただ、この道は地図の上で新しく引かれた線ではありません。
+            下敷きになっているのは、六郷満山の僧たちが約十年に一度歩く修行
+            ——<strong>峯入行（みねいりぎょう）</strong>の道です。
+            公式サイトはこう説明しています。峯入行のコースをベースに、登山道や遊歩道を加えるなどの工夫をして
+            「楽しく、そして心地よく歩けるトレイルとして再構成したもの」。
+        </p>
+        <p>
+            つまりこれは、<strong>修行の道に歩きやすい道を継ぎ足して、誰でも歩ける形にした道</strong>です。
+            整備と運営を担うのは国東半島峯道トレイルクラブ。九州で最初のロングトレイルにあたります。
+            千年のあいだに峯入りがどう姿を変えて、この形にたどり着いたのかは、
+            <a href="/jp/rabithole/05-mineiri/">ねほりはほり5回「嶺入りの変遷」</a>で掘りました。
+        </p>
+        <p>
+            全部を歩き通す必要はありません。一区間だけでも、その一部だけでもかまいません。
+            峰の道に立って、僧たちが千年見てきた景色を自分の目で見る。それだけで十分に、この道の歩き方です。
+        </p>
+        <p class="trail-info">
+            水に強い素材の公式マップ（1部500円）が、道の駅くにさき サイクリングターミナル内で販売されています。
+            有料のガイド派遣もあります。詳しくは
+            <a href="https://kunisakihantou-trail.com/" target="_blank" rel="noopener">公式サイト</a>へ。
+        </p>
+    </div>
 
     {
-        courses.map(({ title, start, goal, img }) => (
+        overall && (
+            <section class="overall">
+                <h3>全域マップ</h3>
+                <a href={overallFull.src} target="_blank" rel="noopener">
+                    <img
+                        src={overall.src}
+                        alt="国東半島峯道ロングトレイル 全域マップ"
+                        width={overall.attributes.width}
+                        height={overall.attributes.height}
+                        class="course-map"
+                    />
+                </a>
+            </section>
+        )
+    }
+
+    <h3>10のコース</h3>
+
+    <p>
+        コースタイムや装備、通行状況といった歩くための実用情報は、
+        <a href="https://kunisakihantou-trail.com/" target="_blank" rel="noopener">公式サイト</a>や公式マップが詳しく確実です。
+        ここでは、<strong>それぞれの道が国東の歴史のどこにつながっているのか</strong>を中心に紹介します。
+        歩く前に読んでおくと、目の前の石や岩の見え方が少し変わるはずです。
+        地図をクリックすると原寸で表示されます。
+    </p>
+
+    <div class="first-pick">
+        <h4>はじめの一本、どれを歩く？</h4>
+        <p>
+            全10コースのうち、<strong>まず歩くなら T-1（前半、ほたるの館まで）・K-1・K-6（両子山の周回だけ）</strong>。
+            見どころが集中していて、短い時間でも国東らしさがつかめる王道です。
+            旅行会社が二泊三日で組むのも、だいたいこのあたりになります。
+        </p>
+        <p>
+            もうひとつ、よくある質問への答えを先に。
+            <strong>K-1とK-2を続けて一日で歩くのは、やめておいたほうがいい</strong>。
+            K-1は峯を4つ越える道で、11キロという数字以上に時間と体力を使います。
+        </p>
+    </div>
+
+    <p class="voice-note">
+        各コースの「歩いた人々の話から」は、このトレイルを歩いた方々から聞いた話をもとにしています。
+        良し悪しというより、<strong>どんな人に向くか、どう歩くと化けるか</strong>の目安として読んでください。
+    </p>
+
+    <p class="map-credit">
+        掲載しているマップは「国東半島峯道ロングトレイル公式マップ（2023版）」です。
+        国東市観光協会のご厚意により掲載しています。
+    </p>
+
+    {
+        courses.map(({ title, start, goal, km, via, terrain, note, voice, img, full }) => (
             <section class="course">
                 <h3>{title}</h3>
                 <p class="route">
-                    出発：{start}　→　到着：{goal}
+                    出発：{start}　→　到着：{goal}　／　{km}km
                 </p>
+                <p class="via">経由：{via}</p>
+                <p class="terrain">道の性格：{terrain}</p>
+                <div class="course-note" set:html={note} />
+                <div class="voice">
+                    <p class="voice-label">歩いた人々の話から</p>
+                    <Fragment set:html={voice} />
+                </div>
                 {img && (
-                    <a href={img.src} target="_blank" rel="noopener">
+                    <a href={full.src} target="_blank" rel="noopener">
                         <img
                             src={img.src}
                             alt={title}
@@ -63,6 +219,30 @@ const courses = await Promise.all(
 </Layout>
 
 <style>
+    .overall {
+        margin-bottom: 2.5rem;
+    }
+
+    .map-credit {
+        font-size: 0.9rem;
+        color: var(--muted);
+        margin-bottom: 2rem;
+    }
+
+    .trail-intro {
+        margin-bottom: 2.5rem;
+    }
+
+    .trail-intro p {
+        margin: 0 0 1rem;
+        line-height: 1.9;
+    }
+
+    .trail-info {
+        font-size: 0.95rem;
+        color: var(--muted);
+    }
+
     .course {
         margin-bottom: 2.5rem;
     }
@@ -72,8 +252,77 @@ const courses = await Promise.all(
     }
 
     .route {
-        margin: 0 0 0.8rem;
+        margin: 0 0 0.2rem;
         color: #555;
+    }
+
+    .first-pick {
+        margin: 1.5rem 0;
+        padding: 1.2rem 1.4rem;
+        border: 1px solid #d8d8d2;
+        border-radius: 6px;
+        background: #fbfbf9;
+    }
+
+    .first-pick h4 {
+        margin: 0 0 0.6rem;
+    }
+
+    .first-pick p {
+        margin: 0 0 0.7rem;
+        line-height: 1.9;
+    }
+
+    .first-pick p:last-child {
+        margin-bottom: 0;
+    }
+
+    .voice-note {
+        font-size: 0.92rem;
+        color: var(--muted);
+        line-height: 1.8;
+        margin-bottom: 2.5rem;
+    }
+
+    .terrain {
+        margin: 0 0 0.8rem;
+        font-size: 0.92rem;
+        color: var(--muted);
+    }
+
+    .voice {
+        margin: 0 0 1.4rem;
+        padding: 0.9rem 1.2rem;
+        background: #f5f5f2;
+        border-left: 3px solid #8a939b;
+        border-radius: 4px;
+    }
+
+    .voice-label {
+        margin: 0 0 0.4rem;
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+        color: #6b7378;
+    }
+
+    .voice :global(p) {
+        margin: 0;
+        line-height: 1.9;
+    }
+
+    .course-note {
+        margin: 0.9rem 0 1.2rem;
+        line-height: 1.9;
+    }
+
+    .course-note :global(p) {
+        margin: 0 0 0.8rem;
+    }
+
+    .via {
+        margin: 0 0 0.8rem;
+        font-size: 0.92rem;
+        color: var(--muted);
     }
 
     .course-map {

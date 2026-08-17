@@ -1,0 +1,86 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import StoryFeedback from '../../../components/StoryFeedback.astro';
+
+export async function getStaticPaths() {
+  const posts = Object.values(
+    import.meta.glob('../../../content/jp/tales/*.mdx', { eager: true })
+  )
+    .filter((post: any) => post.frontmatter?.slug && !post.frontmatter?.draft)
+    .sort((a: any, b: any) => (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999));
+
+  return posts.map((post: any, index: number) => ({
+    params: { slug: post.frontmatter.slug },
+    props: {
+      post,
+      prevPost: posts[index - 1] ?? null,
+      nextPost: posts[index + 1] ?? null,
+    },
+  }));
+}
+
+const { post, prevPost, nextPost } = Astro.props;
+const Content = post.default;
+const fm = post.frontmatter;
+---
+
+<Layout title={`${fm.title} | 国東草子`} font="reading" description={fm.summary}>
+  <main>
+    <nav class="post-nav">
+      <div>{prevPost && <a href={`/jp/tales/${prevPost.frontmatter.slug}/`}>◀ 前へ</a>}</div>
+      <div><a href="/jp/tales/">国東草子 もくじ</a></div>
+      <div>{nextPost && <a href={`/jp/tales/${nextPost.frontmatter.slug}/`}>次へ ▶</a>}</div>
+    </nav>
+
+    <p class="fiction-note">
+      この作品は、史料と伝承を土台にした創作です。
+      どこまでが史実かは、末尾の「この話の材料」で明かしています。
+    </p>
+
+    <p class="era-line">{fm.era}{fm.period && ` ・ ${fm.period}`}</p>
+    <h1>{fm.title}</h1>
+
+    <article class="tale">
+      <Content />
+    </article>
+
+    <StoryFeedback pageTitle={`草子: ${fm.title}`} />
+  </main>
+</Layout>
+
+<style>
+  .post-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+  .post-nav > div { flex: 1; }
+  .post-nav > div:nth-child(1) { text-align: left; }
+  .post-nav > div:nth-child(2) { text-align: center; }
+  .post-nav > div:nth-child(3) { text-align: right; }
+
+  .fiction-note {
+    padding: 0.6rem 1rem;
+    border-left: 3px solid #8a939b;
+    background: #f5f5f2;
+    border-radius: 4px;
+    font-size: 0.92em;
+    color: #444;
+  }
+  .era-line {
+    margin: 1.6rem 0 0;
+    color: #666;
+    font-size: 0.95em;
+  }
+  h1 { margin-top: 0.2rem; }
+  .tale { line-height: 2; }
+  .tale :global(h2) {
+    margin-top: 3rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #ddd;
+    font-size: 1.1em;
+  }
+</style>

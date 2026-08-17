@@ -10,7 +10,7 @@ const ITEMS = [
     {
         href: "/jp/walk/long-trail/",
         label: "国東半島峯道ロングトレイル",
-        lead: "国東半島の峯道をたどる全10コースのロングトレイル。豊後高田コース・国東コースの各コースマップを掲載しています。",
+        lead: "僧たちの修行の道を、誰でも歩けるように再構成した全10コース。熊野磨崖仏から両子寺まで、半島を横切ります。コースマップを掲載しています。",
         icon: longTrailIcon,
     },
 ];
@@ -18,6 +18,28 @@ const ITEMS = [
 
 <Layout title="国東を歩く" lang="jp">
     <h2>国東を歩く</h2>
+
+    <div class="walk-intro">
+        <p>
+            国東半島では、歩くことがそのまま信仰の形でした。
+        </p>
+        <p>
+            峰から峰へ、岩屋から岩屋へ。半島じゅうの行場（ぎょうば）を一筆書きにつないで歩く
+            <strong>峯入り（みねいり）</strong>は、千年以上のあいだ姿を変えながら受け継がれてきた修行です。
+            いまも十年に一度、六郷満山の僧たちが白装束で峰の道をたどります。
+        </p>
+        <p>
+            その道を、誰でも歩けるように継ぎ足し、結び直したのが
+            <a href="/jp/walk/long-trail/">国東半島峯道ロングトレイル</a>。
+            修行の道が、歩く人みんなに開かれた道になりました。
+            千年のあいだに峯入りがどう姿を変えてきたのかは、
+            <a href="/jp/rabithole/05-mineiri/">ねほりはほり5回「嶺入りの変遷」</a>で掘っています。
+        </p>
+        <p>
+            このページには、そうやって「歩いて感じる国東」への入口を集めていきます。
+            いまはロングトレイル1本ですが、半日で歩けるような短い道も、少しずつ増やしていく予定です。
+        </p>
+    </div>
 
     <ul class="walk-list">
         {
@@ -44,6 +66,17 @@ const ITEMS = [
 </Layout>
 
 <style>
+    .walk-intro p {
+        margin: 0 0 1rem;
+        line-height: 1.9;
+    }
+
+    .walk-intro {
+        margin-bottom: 2.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #ddd;
+    }
+
     .walk-list {
         list-style: none;
         padding: 0;

@@ -25,6 +25,7 @@ const items = Object.values(
     </div>
     </header>
     <h2><a href="/jp/story/">国東物語</a></h2>
+    <p class="series-sub">史料でたどる国東1300年</p>
     <div class="preface">
         <Preface />
     </div>
@@ -50,7 +51,13 @@ const items = Object.values(
         </li>
       ))}
     </ul>
-    
+
+    <h2><a href="/jp/tales/">国東草子</a></h2>
+    <p>
+      同じ土地を舞台にした短編小説の連作。時代ごとに一人の名もない人を立たせ、
+      その目を通して当時の暮らしを再現します（創作編。史実との境目は各編末尾で明かします）。
+    </p>
+
     <h2>国東愛を試す</h2>
 　　 <div>
         あなたの国東愛がさくっとわかる
@@ -63,6 +70,10 @@ const items = Object.values(
 </Layout>
 
 <style>
+  .series-sub {
+    margin-top: -0.6rem;
+    color: #666;
+  }
   .toc {
     list-style: none;
     padding-left: 0;

@@ -27,7 +27,8 @@ const items = Object.values(
     <div class="top-row">
     </div>
     </header>
-    <h2><a href="/en/story/">The Tale of Kunisaki</a></h2>
+    <h2><a href="/en/story/">The Kunisaki Chronicle</a></h2>
+    <p class="series-sub">1,300 years of Kunisaki, drawn from the sources</p>
     <div class="preface">
         <Preface />
     </div>
@@ -54,6 +55,12 @@ const items = Object.values(
       ))}
     </ul>
 
+    <h2><a href="/en/tales/">Kunisaki Stories</a></h2>
+    <p>
+      A cycle of short fiction set in the same places: one ordinary life per era,
+      told from the inside. Clearly marked as fiction, with the sources laid out at the end of each piece.
+    </p>
+
     <h2>Test Your Kunisaki Love</h2>
     <div>
         Find out at a glance how deep your love for Kunisaki runs — take the
@@ -64,6 +71,10 @@ const items = Object.values(
 </Layout>
 
 <style>
+  .series-sub {
+    margin-top: -0.6rem;
+    color: #666;
+  }
   .toc {
     list-style: none;
     padding-left: 0;

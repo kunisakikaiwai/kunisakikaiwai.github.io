@@ -1,0 +1,117 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+const tales = Object.values(
+  import.meta.glob('../../../content/jp/tales/*.mdx', { eager: true })
+)
+  .filter((post: any) => post.frontmatter?.slug)
+  .sort((a: any, b: any) => (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999));
+
+const first = tales.find((post: any) => post.frontmatter?.recommended && !post.frontmatter?.draft);
+---
+
+<Layout
+  title="国東草子 | 国東界隈"
+  font="reading"
+  description="国東草子——国東半島を舞台にした短編小説の連作。奈良から明治まで、時代ごとに一人の名もない人を立たせ、その目と手を通して当時の暮らしと世界の見え方を再現します。史料と想像の境目は各編末尾で明かします。"
+>
+  <main>
+    <h2>国東草子</h2>
+    <p class="series-sub">史料の空白を、想像で埋める短編小説集</p>
+
+    <p>
+      <a href="/jp/story/">国東物語</a>と<a href="/jp/rabithole/01-top/">ねほりはほり</a>は、
+      史跡と史料から出発して国東の千三百年を整理してきました。
+      けれど史料は、制度や伽藍のことは語っても、そこに生きた人が朝に何を食べ、何を恐れ、
+      何を楽しみにしていたかまでは教えてくれません。
+    </p>
+    <p>
+      国東草子は、その空白を想像で埋める短編小説の連作です。
+      時代ごとに一人、名もない人を立たせ、その人の目と手を通して、
+      当時の暮らしと、世界がどう見えていたかを再現します。
+    </p>
+    <p class="fiction-note">
+      ここに書かれていることは創作です。どこまでが史料で、どこからが想像かは、
+      各編の末尾「この話の材料」で明かしています。
+      史実として知りたいことは、国東物語とねほりはほりへどうぞ。
+    </p>
+
+    {first && (
+      <div class="first-pick">
+        <h4>はじめて読む方へ — まずこの一編から</h4>
+        <p>
+          <a href={`/jp/tales/${first.frontmatter.slug}/`}>{first.frontmatter.title}</a>
+          {first.frontmatter.summary && <span> — {first.frontmatter.summary}</span>}
+        </p>
+      </div>
+    )}
+
+    <h3>もくじ（時代順）</h3>
+    {tales.length === 0 ? (
+      <p class="preparing">最初の一編を準備中です。</p>
+    ) : (
+      <ul class="toc">
+        {tales.map((post: any) => (
+          <li>
+            <span class="era">{post.frontmatter.era}{post.frontmatter.period && `・${post.frontmatter.period}`}</span>
+            {post.frontmatter.draft
+              ? <span class="draft-title">{post.frontmatter.title}<span class="draft-mark">（準備中）</span></span>
+              : <a href={`/jp/tales/${post.frontmatter.slug}/`}>{post.frontmatter.title}</a>}
+            {!post.frontmatter.draft && post.frontmatter.summary && <span class="summary">{post.frontmatter.summary}</span>}
+          </li>
+        ))}
+      </ul>
+    )}
+  </main>
+</Layout>
+
+<style>
+  .series-sub {
+    margin-top: -0.6rem;
+    color: #666;
+  }
+  .fiction-note {
+    padding: 0.8rem 1.1rem;
+    border-left: 3px solid #8a939b;
+    background: #f5f5f2;
+    border-radius: 4px;
+  }
+  .first-pick {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid #d8d8d2;
+    border-radius: 6px;
+    background: #fbfbf9;
+  }
+  .first-pick h4 {
+    margin: 0 0 0.6rem;
+  }
+  .toc {
+    list-style: none;
+    padding-left: 0;
+  }
+  .toc li {
+    margin-bottom: 0.8rem;
+  }
+  .toc .era {
+    display: inline-block;
+    min-width: 8.5em;
+    color: #666;
+    font-size: 0.9em;
+  }
+  .toc .summary {
+    display: block;
+    margin-left: 8.5em;
+    color: #555;
+    font-size: 0.92em;
+  }
+  .preparing {
+    color: #666;
+  }
+  .draft-title { color: #555; }
+  .draft-mark { margin-left: 0.4em; color: #999; font-size: 0.85em; }
+  @media (max-width: 600px) {
+    .toc .era { display: block; min-width: 0; }
+    .toc .summary { margin-left: 0; }
+  }
+</style>

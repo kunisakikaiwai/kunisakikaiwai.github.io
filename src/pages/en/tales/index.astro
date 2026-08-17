@@ -1,0 +1,96 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+const tales = Object.values(
+  import.meta.glob('../../../content/en/tales/*.mdx', { eager: true })
+)
+  .filter((post: any) => post.frontmatter?.slug)
+  .sort((a: any, b: any) => (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999));
+
+const first = tales.find((post: any) => post.frontmatter?.recommended && !post.frontmatter?.draft);
+---
+
+<Layout
+  title="Kunisaki Stories | Kunisaki Kaiwai"
+  lang="en"
+  font="reading"
+  description="Kunisaki Stories — a cycle of short fiction set on the Kunisaki Peninsula. One ordinary life per era, from the eighth century to the Meiji years, told from the inside. Each piece ends by showing where the sources stop and imagination begins."
+>
+  <main>
+    <h2>Kunisaki Stories</h2>
+    <p class="series-sub">Short fiction for the gaps the sources leave</p>
+
+    <p>
+      <a href="/en/story/">The Kunisaki Chronicle</a> and
+      <a href="/en/rabithole/01-top/">Down the Rabbit Hole</a> start from the ruins and the records
+      and sort out thirteen centuries of Kunisaki. But records speak of institutions and temple halls;
+      they do not say what the people who lived here ate in the morning, what they feared,
+      or what they looked forward to.
+    </p>
+    <p>
+      Kunisaki Stories fills that silence with fiction. Each piece stands one unnamed person in one era
+      and lets you see the world — its work, its rites, its certainties — through their eyes and hands.
+    </p>
+    <p class="fiction-note">
+      Everything here is invented. Where the sources end and imagination begins is laid out
+      in “The Materials” at the end of each piece. For the history itself, turn to the Chronicle
+      and the Rabbit Hole.
+    </p>
+
+    {first && (
+      <div class="first-pick">
+        <h4>New here? Start with this one</h4>
+        <p>
+          <a href={`/en/tales/${first.frontmatter.slug}/`}>{first.frontmatter.title}</a>
+          {first.frontmatter.summary && <span> — {first.frontmatter.summary}</span>}
+        </p>
+      </div>
+    )}
+
+    <h3>Contents (in order of time)</h3>
+    {tales.length === 0 ? (
+      <p class="preparing">The first story is in preparation.</p>
+    ) : (
+      <ul class="toc">
+        {tales.map((post: any) => (
+          <li>
+            <span class="era">{post.frontmatter.era}{post.frontmatter.period && `, ${post.frontmatter.period}`}</span>
+            {post.frontmatter.draft
+              ? <span class="draft-title">{post.frontmatter.title}<span class="draft-mark">(coming soon)</span></span>
+              : <a href={`/en/tales/${post.frontmatter.slug}/`}>{post.frontmatter.title}</a>}
+            {!post.frontmatter.draft && post.frontmatter.summary && <span class="summary">{post.frontmatter.summary}</span>}
+          </li>
+        ))}
+      </ul>
+    )}
+  </main>
+</Layout>
+
+<style>
+  .series-sub { margin-top: -0.6rem; color: #666; }
+  .fiction-note {
+    padding: 0.8rem 1.1rem;
+    border-left: 3px solid #8a939b;
+    background: #f5f5f2;
+    border-radius: 4px;
+  }
+  .first-pick {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid #d8d8d2;
+    border-radius: 6px;
+    background: #fbfbf9;
+  }
+  .first-pick h4 { margin: 0 0 0.6rem; }
+  .toc { list-style: none; padding-left: 0; }
+  .toc li { margin-bottom: 0.8rem; }
+  .toc .era { display: inline-block; min-width: 11em; color: #666; font-size: 0.9em; }
+  .toc .summary { display: block; margin-left: 11em; color: #555; font-size: 0.92em; }
+  .preparing { color: #666; }
+  .draft-title { color: #555; }
+  .draft-mark { margin-left: 0.4em; color: #999; font-size: 0.85em; }
+  @media (max-width: 600px) {
+    .toc .era { display: block; min-width: 0; }
+    .toc .summary { margin-left: 0; }
+  }
+</style>

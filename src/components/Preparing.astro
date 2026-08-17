@@ -7,7 +7,7 @@ const { title, lang = "jp" } = Astro.props;
 const isEn = lang === "en";
 ---
 
-<Layout title={title} lang={lang}>
+<Layout title={title} lang={lang} noindex>
     <section class="preparing">
         <h2>{title}</h2>
         {
